@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Estudiantes | EPET 6</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bg-lista-azul {
+            background-color: #1d4ed8;
+        }
+
+        .text-lista-azul {
+            color: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navegación Superior -->
+    <header class="bg-lista-azul text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="image_b63323.jpg" alt="Logo EPET 6"
+                    class="h-10 w-10 object-cover rounded-full border-2 border-white bg-white">
+                <div>
+                    <h1 class="text-xl font-bold leading-tight">EPET N°6</h1>
+                    <p class="text-xs text-blue-200 font-semibold tracking-wider">LISTA AZUL</p>
+                </div>
+            </div>
+            <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
+                class="hover:text-blue-200 transition-colors">
+                <i class="fa-brands fa-instagram text-2xl"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
+        <section class="fade-in">
+            <div class="bg-white rounded-xl shadow-md p-6 slide-up border-t-4 border-lista-azul">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Buzón de Ideas</h2>
+                    <p class="text-gray-500 mt-2 text-sm">Tu voz importa. Dejanos tu sugerencia, queja o propuesta para
+                        mejorar la EPET.</p>
+                </div>
+
+                <form id="form-sugerencias" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre (Opcional)</label>
+                            <input type="text" id="nombre"
+                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Ej: Juan Pérez">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Curso / Año</label>
+                            <input type="text" id="curso"
+                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Ej: 4to 1ra">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Tu Sugerencia *</label>
+                        <textarea id="mensaje" required rows="4"
+                            class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+                            placeholder="Escribí acá tu idea o reclamo..."></textarea>
+                    </div>
+
+                    <button type="submit" id="btn-submit"
+                        class="w-full bg-lista-azul hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center shadow-md">
+                        <i class="fa-regular fa-paper-plane mr-2"></i> Enviar Sugerencia
+                    </button>
+
+                    <div id="msg-exito"
+                        class="hidden bg-green-100 text-green-700 p-3 rounded-lg text-sm text-center font-medium mt-2">
+                        ¡Enviado con éxito! Gracias por sumar.
+                    </div>
+                    <div id="msg-error"
+                        class="hidden bg-red-100 text-red-700 p-3 rounded-lg text-sm text-center font-medium mt-2">
+                        Hubo un error al enviar. Intentá de nuevo.
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6 mt-auto">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col items-center">
+            <p class="text-xs mt-2">&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén</p>
+        </div>
+    </footer>
+
+    <!-- Lógica Webhook -->
+    <script>
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1511202993880436846/W0j_NPm1yFDuWCTst6edvf96je7K_TAe8Kx8AfVj0S_uE5plPHxzCspcuFDqi2uVKcyF";
+
+        document.getElementById('form-sugerencias').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const btnSubmit = document.getElementById('btn-submit');
+            const msgExito = document.getElementById('msg-exito');
+            const msgError = document.getElementById('msg-error');
+
+            const nombre = document.getElementById('nombre').value || "Anónimo";
+            const curso = document.getElementById('curso').value || "No especificado";
+            const mensaje = document.getElementById('mensaje').value;
+
+            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            btnSubmit.disabled = true;
+            msgExito.classList.add('hidden');
+            msgError.classList.add('hidden');
+
+            const payload = {
+                content: null,
+                embeds: [{
+                    title: "📨 Nueva Sugerencia Recibida",
+                    color: 1920472,
+                    fields: [
+                        { name: "👤 Estudiante", value: nombre, inline: true },
+                        { name: "🏫 Curso", value: curso, inline: true },
+                        { name: "📝 Mensaje", value: mensaje }
+                    ],
+                    footer: { text: "Buzón Web Lista Azul EPET 6" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                const response = await fetch(DISCORD_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    msgExito.classList.remove('hidden');
+                    document.getElementById('form-sugerencias').reset();
+                } else {
+                    msgError.classList.remove('hidden');
+                }
+            } catch (error) {
+                msgError.classList.remove('hidden');
+            } finally {
+                btnSubmit.innerHTML = '<i class="fa-regular fa-paper-plane mr-2"></i> Enviar Sugerencia';
+                btnSubmit.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
