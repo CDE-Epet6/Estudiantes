@@ -5,12 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Secretario | Lista Azul</title>
+    <meta name="description" content="Panel de administración de la plataforma.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="js/components.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -78,7 +81,7 @@
             class="hidden text-center w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
             <i class="fa-solid fa-lock text-5xl text-gray-300 mb-6"></i>
             <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Área Restringida</h2>
-            <p class="text-gray-500 mb-8 text-sm">Este panel es de uso exclusivo para el Administrador de la plataforma.
+            <p class="text-gray-500 mb-8 text-sm">Este panel es de uso exclusivo para el Centro de Estudiantes.
             </p>
             <button id="btn-login-google"
                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
@@ -103,7 +106,7 @@
             <div id="seccion-gestor-admins"
                 class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
                 <h3 class="text-xl font-bold text-gray-900 mb-2"><i
-                        class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Centero de estudiantes</h3>
+                        class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Centro de estudiantes</h3>
                 <p class="text-sm text-gray-600 mb-6">Los correos en esta lista tendrán un tachito de basura habilitado
                     en la página de Votaciones para eliminar sugerencias inapropiadas.</p>
 
@@ -164,27 +167,15 @@
 
     </main>
 
+    <div id="footer-container"></div>
+
     <!-- Firebase SDK (Módulos ES6) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { auth, db } from "./js/firebase-config.js";
 
-        // Configuración de Firebase - Lista Azul
-        const firebaseConfig = {
-            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
-            authDomain: "lista-azul.firebaseapp.com",
-            projectId: "lista-azul",
-            storageBucket: "lista-azul.firebasestorage.app",
-            messagingSenderId: "306682622476",
-            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
-            measurementId: "G-1K9N1RFZES"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        const db = getFirestore(app);
 
         // UI Elements
         const pLoading = document.getElementById('panel-loading');

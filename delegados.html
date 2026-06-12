@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Delegados | EPET 6</title>
+    <meta name="description" content="Portal de delegados del Centro de Estudiantes EPET 6.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="js/components.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
         .bg-lista-azul { background-color: #1d4ed8; }
@@ -21,38 +29,9 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 antialiased flex flex-col min-h-screen transition-colors duration-300">
 
-    <!-- Navegación Superior -->
-    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0 flex items-center">
-                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
-                </div>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
-                <a href="index.html" class="hover:text-blue-200 transition-colors">Inicio</a>
-                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
-                <a href="buzon.html" class="hover:text-blue-200 transition-colors">Sugerencias</a>
-                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
-                <a id="nav-item-delegados" href="delegados.html" class="hidden text-blue-200 cursor-default border-b-2 border-blue-200 pb-1"><i class="fa-solid fa-users mr-1"></i> Delegados</a>
-                <a id="nav-item-admin" href="admin.html" class="hidden hover:text-yellow-300 transition-colors text-yellow-100"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
-            </nav>
-            <div id="user-menu" class="flex items-center">
-                <!-- Login info -->
-            </div>
-        </div>
-        <!-- Menú móvil simple -->
-        <div class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
-            <a href="index.html" class="hover:text-blue-200 whitespace-nowrap">Inicio</a>
-            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
-            <a href="buzon.html" class="hover:text-blue-200 whitespace-nowrap">Sugerencias</a>
-            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
-            <a id="nav-mobile-delegados" href="delegados.html" class="hidden text-blue-200 border-b border-blue-200 whitespace-nowrap">Delegados</a>
-            <a id="nav-mobile-admin" href="admin.html" class="hidden text-yellow-200 whitespace-nowrap">Admin</a>
-        </div>
-    </header>
+    <div id="header-container"></div>
 
     <main class="flex-grow w-full max-w-4xl mx-auto px-4 py-12">
 
@@ -63,34 +42,50 @@
         </div>
 
         <!-- ESTADO: REQUIERE LOGIN -->
-        <div id="panel-login" class="hidden text-center w-full max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+        <div id="panel-login" class="hidden text-center w-full max-w-md mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
             <i class="fa-solid fa-users text-5xl text-blue-300 mb-6"></i>
-            <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Portal de Delegados</h2>
-            <p class="text-gray-500 mb-8 text-sm">Iniciá sesión para ver la agenda oficial de reuniones y eventos.</p>
+            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Portal de Delegados</h2>
+            <p class="text-gray-600 dark:text-gray-300 text-lg mb-8">Área exclusiva para delegados de curso.</p>
             <button id="btn-login-google" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
                 <i class="fa-brands fa-google text-lg"></i> Iniciar Sesión con Google
             </button>
         </div>
 
         <!-- ESTADO: DENEGADO -->
-        <div id="panel-denied" class="hidden text-center w-full max-w-md mx-auto bg-red-50 p-8 rounded-2xl shadow-lg border border-red-200">
+        <div id="panel-denied" class="hidden text-center w-full max-w-md mx-auto bg-red-50 dark:bg-red-900/20 p-8 rounded-2xl shadow-lg border border-red-200 dark:border-red-800">
             <i class="fa-solid fa-ban text-5xl text-red-500 mb-6"></i>
-            <h2 class="text-2xl font-extrabold text-red-900 mb-2">Acceso Restringido</h2>
-            <p class="text-red-700 mb-8 text-sm font-medium">No formás parte del centro de estudiantes ni sos delegado oficial.</p>
-            <p class="text-xs text-gray-500">Pedile al administrador que agregue tu correo en el Panel Maestro.</p>
+            <h2 class="text-2xl font-extrabold text-red-900 dark:text-red-100 mb-2">Acceso Restringido</h2>
+            <p class="text-red-700 dark:text-red-300 mb-8 text-sm font-medium">No formás parte del centro de estudiantes ni sos delegado oficial.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Pedile al administrador que agregue tu correo en el Panel Maestro.</p>
         </div>
 
         <!-- ESTADO: AUTORIZADO (AGENDA) -->
         <div id="panel-agenda" class="hidden w-full space-y-8">
-            <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Agenda Oficial</h2>
+            <div class="flex justify-between items-center border-b-2 border-gray-200 dark:border-gray-700 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Agenda Oficial</h2>
                 <button id="btn-nuevo-evento" onclick="abrirCreador()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow transition-colors flex items-center">
                     <i class="fa-solid fa-plus-circle mr-2"></i> Nuevo
                 </button>
             </div>
 
+            <div id="delegados-content" class="hidden space-y-8">
+            
+            <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6"><i class="fa-solid fa-bullhorn text-blue-600 dark:text-blue-400 mr-2"></i> Anuncios para Delegados</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-xl border border-blue-100 dark:border-blue-800 border-l-4 border-l-blue-500">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-blue-900 dark:text-blue-100">Próxima Reunión de Delegados</h4>
+                            <span class="text-xs font-bold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/50 px-2 py-1 rounded">Importante</span>
+                        </div>
+                        <p class="text-sm text-blue-800 dark:text-blue-200">La próxima reunión general de delegados se llevará a cabo el próximo martes a las 10:00 AM en el SUM. Temario: Organización de torneos deportivos.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- CREADOR DE EVENTOS (Oculto) -->
-            <section id="editor-evento" class="hidden slide-up bg-blue-50 p-6 rounded-xl border-2 border-lista-azul shadow-md">
+            <section id="editor-evento" class="hidden slide-up bg-blue-50 dark:bg-gray-800 p-6 rounded-xl border-2 border-lista-azul shadow-md">
                 <div class="flex justify-between items-center mb-4">
                     <h3 id="titulo-panel" class="font-bold text-lg text-lista-azul"><i class="fa-solid fa-calendar-plus mr-2"></i>Crear Nuevo Evento</h3>
                     <button onclick="cerrarEditor()" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -148,31 +143,15 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-auto border-t-4 border-blue-600 text-center text-sm">
-        <p class="flex justify-center items-center gap-2">&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén. <a href="admin.html" class="hover:text-white transition-colors" title="Acceso Administrativo"><i class="fa-solid fa-lock text-gray-700 hover:text-gray-400"></i></a></p>
-    </footer>
+    <div id="footer-container"></div>
 
     <!-- Firebase SDK -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, orderBy, query, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, orderBy, query, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { auth, db } from "./js/firebase-config.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
-            authDomain: "lista-azul.firebaseapp.com",
-            projectId: "lista-azul",
-            storageBucket: "lista-azul.firebasestorage.app",
-            messagingSenderId: "306682622476",
-            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
-            measurementId: "G-1K9N1RFZES"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-        const db = getFirestore(app);
 
         // UI
         const pLoading = document.getElementById('panel-loading');

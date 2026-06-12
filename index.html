@@ -5,12 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Centro de Estudiantes | EPET 6</title>
+    <meta name="description"
+        content="Portal del Centro de Estudiantes de la EPET 6 (Lista Azul). Votaciones, propuestas y buzón de sugerencias.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="js/components.js"></script>
+
 
     <style>
         body {
@@ -79,37 +84,7 @@
 
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
-    <!-- Navegación Superior -->
-    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0 flex items-center">
-                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
-                </div>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
-                <a href="index.html" class="text-blue-200 cursor-default border-b-2 border-blue-200 pb-1">Inicio</a>
-                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
-                <a href="buzon.html" class="hover:text-blue-200 transition-colors">Sugerencias</a>
-                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
-                <a id="nav-item-delegados" href="delegados.html" class="hidden hover:text-blue-200 transition-colors">Delegados</a>
-                <a id="nav-item-admin" href="admin.html" class="hidden hover:text-yellow-300 transition-colors text-yellow-100"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
-            </nav>
-            <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
-                class="hover:text-blue-200 transition-colors transform hover:scale-110 duration-200">
-                <i class="fa-brands fa-instagram text-3xl"></i>
-            </a>
-        </div>
-        <!-- Menú móvil simple -->
-        <div class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
-            <a href="index.html" class="text-blue-200 border-b border-blue-200 whitespace-nowrap">Inicio</a>
-            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
-            <a href="buzon.html" class="hover:text-blue-200 whitespace-nowrap">Sugerencias</a>
-            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
-            <a id="nav-mobile-delegados" href="delegados.html" class="hidden hover:text-blue-200 whitespace-nowrap">Delegados</a>
-            <a id="nav-mobile-admin" href="admin.html" class="hidden text-yellow-200 whitespace-nowrap">Admin</a>
-        </div>
-    </header>
+    <div id="header-container"></div>
 
     <!-- Contenido Principal -->
     <main class="flex-grow w-full">
@@ -137,11 +112,53 @@
             </div>
         </section>
 
+        <!-- Tarjetas de Navegación Rápida -->
+        <section class="max-w-7xl mx-auto px-4 py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tarjeta Propuestas -->
+                <a href="propuestas.html" data-aos="fade-up" data-aos-delay="100"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100">
+                    <div
+                        class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bullhorn text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Nuestras Propuestas</h3>
+                    <p class="text-gray-600 font-medium">Conocé nuestras ideas para mejorar el colegio, desde los
+                        baños hasta los eventos.</p>
+                </a>
+
+                <!-- Tarjeta Buzón -->
+                <a href="buzon.html" data-aos="fade-up" data-aos-delay="200"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 relative overflow-hidden">
+                    <div
+                        class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-envelope-open-text text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Buzón de Sugerencias</h3>
+                    <p class="text-gray-600 font-medium">¿Tenés una idea o reclamo? Dejala acá para que todos puedan
+                        votarla y apoyarla.</p>
+                </a>
+
+                <!-- Tarjeta Votaciones -->
+                <a href="votacion.html" data-aos="fade-up" data-aos-delay="300"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 md:col-span-2 lg:col-span-1">
+                    <div
+                        class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-check-to-slot text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Votar Ideas</h3>
+                    <p class="text-gray-600 font-medium">Entrá a ver qué proponen tus compañeros y votá las ideas
+                        que más te representen.</p>
+                </a>
+            </div>
+        </section>
+
         <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
 
             <!-- Cuenta Regresiva -->
             <section
-                class="slide-up delay-100 bg-blue-600 text-white p-8 md:p-12 rounded-3xl shadow-lg border border-blue-500 text-center relative overflow-hidden">
+                class="slide-up delay-100 bg-blue-600 text-white p-8 md:p-12 rounded-3xl shadow-lg border border-blue-500 text-center relative overflow-hidden"
+                data-aos="fade-up">
                 <!-- Decoración -->
                 <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full"></div>
                 <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-white opacity-5 rounded-full"></div>
@@ -180,16 +197,22 @@
             </section>
 
             <!-- Quiénes Somos y El Equipo -->
-            <section class="slide-up delay-100 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 text-center">
+            <section
+                class="slide-up delay-100 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 text-center"
+                data-aos="fade-up">
                 <div class="max-w-4xl mx-auto space-y-12">
                     <!-- Introducción -->
                     <div>
-                        <h3 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-blue-600 pb-2 mb-6">Quiénes Somos</h3>
+                        <h3 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-blue-600 pb-2 mb-6">
+                            Quiénes Somos</h3>
                         <p class="text-lg text-gray-600 leading-relaxed mb-4">
-                            Somos la <strong>Lista Azul</strong>, un equipo conformado por alumnos de distintas especialidades y años. Nuestro objetivo principal es representar tu voz ante los directivos y mejorar el día a día en la técnica.
+                            Somos la <strong>Lista Azul</strong>, un equipo conformado por alumnos de distintos años.
+                            Nuestro objetivo principal es representar tu voz ante los directivos
+                            y mejorar el día a día en la técnica.
                         </p>
                         <p class="text-lg text-gray-600 leading-relaxed">
-                            Creemos en la transparencia, el compañerismo y el trabajo constante para tener la escuela que merecemos.
+                            Creemos en la transparencia, el compañerismo y el trabajo constante para tener la escuela
+                            que merecemos.
                         </p>
                     </div>
 
@@ -222,59 +245,33 @@
 
                     <!-- Vocales -->
                     <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100">
-                        <h4 class="text-xl font-bold text-gray-800 mb-6"><i class="fa-solid fa-users text-blue-500 mr-2"></i> Vocales</h4>
+                        <h4 class="text-xl font-bold text-gray-800 mb-6"><i
+                                class="fa-solid fa-users text-blue-500 mr-2"></i> Vocales</h4>
                         <div class="flex flex-wrap justify-center gap-4">
-                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agostina Garcia</span>
-                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Franco Panizza</span>
-                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Matias Segura</span>
-                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agustin Traipe</span>
-                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Leonel Cordoba</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agostina
+                                Garcia</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Franco
+                                Panizza</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Matias
+                                Segura</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agustin
+                                Traipe</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Leonel
+                                Cordoba</span>
                         </div>
                     </div>
                 </div>
             </section>
 
-
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-12 border-t-4 border-blue-600">
-        <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-                <h4 class="mb-4">
-                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity">
-                </h4>
-                <p class="text-sm text-gray-400">Trabajando todos los días para hacer de la EPET 6 un lugar mejor para
-                    todos los estudiantes.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold text-lg mb-4">Contacto Rápido</h4>
-                <ul class="space-y-2 text-sm">
-                    <li>
-                        <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
-                            class="hover:text-white transition-colors flex items-center">
-                            <i class="fa-brands fa-instagram w-6"></i> @cde.epet6.listaazul
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold text-lg mb-4">Enlaces Útiles</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="propuestas.html" class="hover:text-white transition-colors">Nuestras Propuestas</a></li>
-                    <li><a href="buzon.html" class="hover:text-white transition-colors">Dejar una Sugerencia</a></li>
-                    <li><a href="votacion.html" class="hover:text-white transition-colors">Votar Ideas</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-            <p>&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén.</p>
-            <p class="mt-2 md:mt-0 flex items-center gap-2">Diseñado por estudiantes para estudiantes. <a href="admin.html" class="hover:text-gray-300 transition-colors ml-1" title="Acceso Administrativo"><i class="fa-solid fa-lock text-gray-700 hover:text-gray-400"></i></a></p>
-        </div>
-    </footer>
-
-    <!-- Lógica Webhook & Anti-Spam -->
+    <div id="footer-container"></div>
 
     <!-- Lógica de Cuenta Regresiva -->
     <script>
@@ -301,54 +298,6 @@
             document.getElementById('cd-minutes').innerText = minutes.toString().padStart(2, '0');
             document.getElementById('cd-seconds').innerText = seconds.toString().padStart(2, '0');
         }, 1000);
-
-
-    </script>
-
-    <!-- Firebase Auth para menú dinámico -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
-            authDomain: "lista-azul.firebaseapp.com",
-            projectId: "lista-azul",
-            storageBucket: "lista-azul.firebasestorage.app",
-            messagingSenderId: "306682622476",
-            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
-            measurementId: "G-1K9N1RFZES"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user && !user.isAnonymous) {
-                try {
-                    const adminDoc = await getDoc(doc(db, "config", "admins"));
-                    let isAdmin = false;
-                    if (adminDoc.exists() && adminDoc.data().emails && adminDoc.data().emails.includes(user.email)) {
-                        isAdmin = true;
-                    }
-
-                    if (isAdmin) {
-                        document.getElementById('nav-item-admin')?.classList.remove('hidden');
-                        document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
-                        document.getElementById('nav-item-delegados')?.classList.remove('hidden');
-                        document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                    } else {
-                        const delSnap = await getDoc(doc(db, "config", "delegados"));
-                        if (delSnap.exists() && delSnap.data().emails && delSnap.data().emails.includes(user.email)) {
-                            document.getElementById('nav-item-delegados')?.classList.remove('hidden');
-                            document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                        }
-                    }
-                } catch(e) { console.error("Error verificando permisos", e); }
-            }
-        });
     </script>
 </body>
 

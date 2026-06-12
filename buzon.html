@@ -5,12 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buzón de Ideas | EPET 6</title>
+    <meta name="description" content="Buzón de sugerencias e ideas del Centro de Estudiantes de la EPET 6.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="js/components.js"></script>
 
     <style>
         body {
@@ -27,211 +30,139 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .bg-lista-azul { background-color: #1d4ed8; }
-        .text-lista-azul { color: #1d4ed8; }
+        .bg-lista-azul {
+            background-color: #1d4ed8;
+        }
+
+        .text-lista-azul {
+            color: #1d4ed8;
+        }
     </style>
 </head>
 
 <body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
-    <!-- Navegación Superior -->
-    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <div class="flex-shrink-0 flex items-center">
-                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
-                </div>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
-                <a href="index.html" class="hover:text-blue-200 transition-colors">Inicio</a>
-                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
-                <a href="buzon.html" class="text-blue-200 cursor-default border-b-2 border-blue-200 pb-1">Sugerencias</a>
-                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
-                <a id="nav-item-delegados" href="delegados.html" class="hidden hover:text-blue-200 transition-colors">Delegados</a>
-                <a id="nav-item-admin" href="admin.html" class="hidden hover:text-yellow-300 transition-colors text-yellow-100"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
-            </nav>
-            <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
-                class="hover:text-blue-200 transition-colors transform hover:scale-110 duration-200">
-                <i class="fa-brands fa-instagram text-3xl"></i>
-            </a>
-        </div>
-        <!-- Menú móvil simple -->
-        <div class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
-            <a href="index.html" class="hover:text-blue-200 whitespace-nowrap">Inicio</a>
-            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
-            <a href="buzon.html" class="text-blue-200 border-b border-blue-200 whitespace-nowrap">Sugerencias</a>
-            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
-            <a id="nav-mobile-delegados" href="delegados.html" class="hidden hover:text-blue-200 whitespace-nowrap">Delegados</a>
-            <a id="nav-mobile-admin" href="admin.html" class="hidden text-yellow-200 whitespace-nowrap">Admin</a>
-        </div>
-    </header>
+    <div id="header-container"></div>
 
     <!-- Contenido Principal -->
     <main class="flex-grow w-full max-w-5xl mx-auto px-4 py-16">
 
         <!-- Buzón de Ideas -->
         <section id="buzon" class="slide-up">
-            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 max-w-3xl mx-auto relative overflow-hidden">
+            <div
+                class="bg-white rounded-3xl shadow-xl p-8 md:p-10 border border-gray-100 max-w-3xl mx-auto relative overflow-hidden">
                 <!-- Decoración visual -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -z-10"></div>
 
                 <div class="text-center mb-8">
-                    <span class="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-3">Tu voz importa</span>
+                    <span
+                        class="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider mb-3">Tu
+                        voz importa</span>
                     <h2 class="text-3xl font-bold text-gray-900">Buzón de Sugerencias</h2>
-                    <p class="text-gray-500 mt-3 text-sm md:text-base">Dejanos tu sugerencia, queja o propuesta. Podés hacerlo de forma anónima, o dejarnos un medio de contacto si querés que te respondamos.</p>
+                    <p class="text-gray-500 mt-3 text-sm md:text-base">Dejanos tu sugerencia, queja o propuesta. Podés
+                        hacerlo de forma anónima, o dejarnos un medio de contacto si querés que te respondamos.</p>
                 </div>
 
                 <form id="form-sugerencias" class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre o Apodo <span class="text-gray-400 font-normal">(Opcional)</span></label>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre o Apodo <span
+                                    class="text-gray-400 font-normal">(Opcional)</span></label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                     <i class="fa-regular fa-user"></i>
                                 </div>
-                                <input type="text" id="nombre" class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" placeholder="Ej: Juan">
+                                <input type="text" id="nombre"
+                                    class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                    placeholder="Ej: Juan">
                             </div>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-700 mb-2">Curso / Año</label>
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                                <div
+                                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                     <i class="fa-solid fa-chalkboard-user"></i>
                                 </div>
-                                <input type="text" id="curso" class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" placeholder="Ej: 4to B">
+                                <input type="text" id="curso"
+                                    class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                    placeholder="Ej: 4to B">
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Medio de Contacto <span class="text-gray-400 font-normal">(Opcional - para responderte)</span></label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Medio de Contacto <span
+                                class="text-gray-400 font-normal">(Opcional - para responderte)</span></label>
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <div
+                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
                                 <i class="fa-brands fa-instagram"></i>
                             </div>
-                            <input type="text" id="contacto" class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" placeholder="Ej: @tu_instagram o mail.">
+                            <input type="text" id="contacto"
+                                class="w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                placeholder="Ej: @tu_instagram o mail.">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tu Mensaje <span class="text-red-500">*</span></label>
-                        <textarea id="mensaje" required rows="5" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none" placeholder="Escribí acá tu idea, reclamo o qué te gustaría mejorar en la escuela..."></textarea>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tu Mensaje <span
+                                class="text-red-500">*</span></label>
+                        <textarea id="mensaje" required rows="5"
+                            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
+                            placeholder="Escribí acá tu idea, reclamo o qué te gustaría mejorar en la escuela..."></textarea>
                     </div>
 
                     <div class="flex items-start bg-blue-50 p-4 rounded-xl border border-blue-100">
                         <div class="flex items-center h-5">
-                            <input id="hacer-publico" type="checkbox" class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer transition-all">
+                            <input id="hacer-publico" type="checkbox"
+                                class="w-5 h-5 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2 cursor-pointer transition-all">
                         </div>
                         <label for="hacer-publico" class="ms-3 text-sm font-medium text-blue-900 cursor-pointer">
-                            Quiero que esta idea se publique de forma <strong>anónima</strong> para que otros alumnos la voten.
+                            Quiero que esta idea se publique de forma <strong>anónima</strong> para que otros alumnos la
+                            voten.
                         </label>
                     </div>
 
-                    <button type="submit" id="btn-submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex justify-center items-center shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5">
+                    <button type="submit" id="btn-submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 flex justify-center items-center shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-0.5">
                         <i class="fa-regular fa-paper-plane mr-2"></i> Enviar Mensaje al Centro
                     </button>
 
-                    <div id="msg-exito" class="hidden bg-green-50 text-green-700 p-4 rounded-xl text-sm text-center font-medium border border-green-200 animate-pulse">
-                        <i class="fa-solid fa-circle-check mr-1"></i> ¡Mensaje enviado con éxito! Gracias por sumar tu voz.
-                    </div>
-                    <div id="msg-error" class="hidden bg-red-50 text-red-700 p-4 rounded-xl text-sm text-center font-medium border border-red-200">
-                        <i class="fa-solid fa-circle-exclamation mr-1"></i> Hubo un error al enviar.
-                        <span id="error-text">Intentá de nuevo en unos minutos.</span>
-                    </div>
                 </form>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-auto border-t-4 border-blue-600">
-        <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            <div>
-                <h4 class="mb-4">
-                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity">
-                </h4>
-                <p class="text-sm text-gray-400">Trabajando todos los días para hacer de la EPET 6 un lugar mejor para todos los estudiantes.</p>
-            </div>
-            <div>
-                <h4 class="text-white font-bold text-lg mb-4">Contacto Rápido</h4>
-                <ul class="space-y-2 text-sm">
-                    <li>
-                        <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank" class="hover:text-white transition-colors flex items-center">
-                            <i class="fa-brands fa-instagram w-6"></i> @cde.epet6.listaazul
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold text-lg mb-4">Enlaces Útiles</h4>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="propuestas.html" class="hover:text-white transition-colors">Nuestras Propuestas</a></li>
-                    <li><a href="buzon.html" class="hover:text-white transition-colors">Dejar una Sugerencia</a></li>
-                    <li><a href="votacion.html" class="hover:text-white transition-colors">Votar Ideas</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-            <p>&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén.</p>
-            <p class="mt-2 md:mt-0 flex items-center gap-2">Diseñado por estudiantes para estudiantes. <a href="admin.html" class="hover:text-gray-300 transition-colors ml-1" title="Acceso Administrativo"><i class="fa-solid fa-lock text-gray-700 hover:text-gray-400"></i></a></p>
-        </div>
-    </footer>
+    <div id="footer-container"></div>
 
     <!-- Lógica Webhook, Firebase & Anti-Spam -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-        // Configuración de Firebase - Lista Azul
-        const firebaseConfig = {
-            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
-            authDomain: "lista-azul.firebaseapp.com",
-            projectId: "lista-azul",
-            storageBucket: "lista-azul.firebasestorage.app",
-            messagingSenderId: "306682622476",
-            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
-            measurementId: "G-1K9N1RFZES"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        onAuthStateChanged(auth, async (user) => {
-            if (user && !user.isAnonymous) {
-                try {
-                    const adminDoc = await getDoc(doc(db, "config", "admins"));
-                    let isAdmin = false;
-                    if (adminDoc.exists() && adminDoc.data().emails && adminDoc.data().emails.includes(user.email)) {
-                        isAdmin = true;
-                    }
-
-                    if (isAdmin) {
-                        document.getElementById('nav-item-admin')?.classList.remove('hidden');
-                        document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
-                        document.getElementById('nav-item-delegados')?.classList.remove('hidden');
-                        document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                    } else {
-                        const delSnap = await getDoc(doc(db, "config", "delegados"));
-                        if (delSnap.exists() && delSnap.data().emails && delSnap.data().emails.includes(user.email)) {
-                            document.getElementById('nav-item-delegados')?.classList.remove('hidden');
-                            document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                        }
-                    }
-                } catch(e) { console.error("Error verificando permisos", e); }
-            }
-        });
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { db } from "./js/firebase-config.js";
 
         // Obfuscación básica (Base64) del Token y Chat ID para evitar rastreadores simples
         const ENCODED_BOT_TOKEN = "ODc4NTE1NTA5MTpBQUVaREg2QklXWFh4YzNvYklvTTNhcXZjQkxldnk1NFlnOA==";
@@ -239,25 +170,24 @@
         const ENCODED_DISCORD_WEBHOOK = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTUxMTIwMjk5Mzg4MDQzNjg0Ni9XMGpfTlBtMXlGRHVXQ1RzdDZlZHZmOTZqZTdLX1RBZThLeDhBZlZqMFNfdUU1cGxQSHh6Q3NwY3VGRHFpMnVWS2N5Rg==";
 
         // Tiempo de espera entre mensajes (Cooldown) - 1 minuto (60000 ms)
-        const COOLDOWN_TIME = 60 * 1000;
+        // Tiempo de espera entre mensajes (Cooldown) - 3 minutos
+        const COOLDOWN_MINUTES = 3;
 
         document.getElementById('form-sugerencias').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const btnSubmit = document.getElementById('btn-submit');
-            const msgExito = document.getElementById('msg-exito');
-            const msgError = document.getElementById('msg-error');
-            const errorText = document.getElementById('error-text');
 
             // --- Verificación de Cooldown (Anti-Spam Básico) ---
-            const lastSent = localStorage.getItem('last_suggestion_time');
-            if (lastSent) {
-                const timePassed = Date.now() - parseInt(lastSent);
-                if (timePassed < COOLDOWN_TIME) {
-                    const timeLeft = Math.ceil((COOLDOWN_TIME - timePassed) / 1000);
-                    msgError.classList.remove('hidden');
-                    msgExito.classList.add('hidden');
-                    errorText.innerText = `Por favor, esperá ${timeLeft} segundos antes de enviar otro mensaje.`;
+            const lastTime = localStorage.getItem('last_suggestion_time');
+            if (lastTime) {
+                const diffMs = Date.now() - parseInt(lastTime);
+                const diffMins = Math.floor(diffMs / 60000);
+                if (diffMins < COOLDOWN_MINUTES) {
+                    window.Toast.fire({
+                        icon: 'warning',
+                        title: `Por favor espera ${COOLDOWN_MINUTES - diffMins} minutos antes de enviar otro mensaje.`
+                    });
                     return;
                 }
             }
@@ -271,18 +201,17 @@
             const hacerPublico = checkboxPublico ? "✅ SÍ (Publicar Anónimo)" : "❌ NO";
 
             if (mensaje.length < 5) {
-                msgError.classList.remove('hidden');
-                msgExito.classList.add('hidden');
-                errorText.innerText = "El mensaje es muy corto. Escribí un poco más.";
+                window.Toast.fire({
+                    icon: 'error',
+                    title: "El mensaje es muy corto. Escribí un poco más."
+                });
                 return;
             }
 
             // UI Feedback
-            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enviando...';
+            btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Enviando...';
             btnSubmit.disabled = true;
             btnSubmit.classList.add('opacity-75', 'cursor-not-allowed');
-            msgExito.classList.add('hidden');
-            msgError.classList.add('hidden');
 
             // Formatear mensaje para Telegram (Texto plano para evitar errores con caracteres raros)
             const textMessage = `📨 NUEVO MENSAJE - LISTA AZUL\n\n` +
@@ -357,15 +286,20 @@
                 if (resTelegram.ok && resDiscord.ok) {
                     // Éxito: Guardar tiempo en localStorage y mostrar mensaje
                     localStorage.setItem('last_suggestion_time', Date.now().toString());
-                    msgExito.classList.remove('hidden');
+                    window.Toast.fire({
+                        icon: 'success',
+                        title: '¡Mensaje enviado con éxito! Gracias por sumar tu voz.'
+                    });
                     document.getElementById('form-sugerencias').reset();
                 } else {
                     throw new Error("Respuesta no OK de Telegram o Discord");
                 }
             } catch (error) {
                 console.error(error);
-                msgError.classList.remove('hidden');
-                errorText.innerText = "Error de conexión. Intentá nuevamente.";
+                window.Toast.fire({
+                    icon: 'error',
+                    title: 'Hubo un error al enviar. Intentá de nuevo en unos minutos.'
+                });
             } finally {
                 // Restaurar botón
                 btnSubmit.innerHTML = '<i class="fa-regular fa-paper-plane mr-2"></i> Enviar Mensaje al Centro';
