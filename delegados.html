@@ -157,7 +157,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, orderBy, query, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
@@ -186,6 +186,8 @@
 
         let eventosGlobales = [];
         let eventoEditandoId = null;
+        let diccionarioNombres = {};
+        let currentUserEmail = null;
 
         onAuthStateChanged(auth, async (user) => {
             pLoading.classList.add('hidden');
@@ -206,16 +208,25 @@
                 // Verificar Rol
                 let isDelegado = false;
                 window.currentUserIsAdmin = false;
+                currentUserEmail = user.email;
 
                 try {
                     const admSnap = await getDoc(doc(db, "config", "admins"));
-                    if (admSnap.exists() && admSnap.data().emails && admSnap.data().emails.includes(user.email)) {
-                        window.currentUserIsAdmin = true;
+                    if (admSnap.exists() && admSnap.data().emails) {
+                        if (admSnap.data().emails.includes(user.email)) window.currentUserIsAdmin = true;
+                        if (admSnap.data().nombres) Object.assign(diccionarioNombres, admSnap.data().nombres);
+                        for (const key in admSnap.data()) {
+                            if (key.startsWith('nombres.')) diccionarioNombres[key.replace('nombres.', '')] = admSnap.data()[key];
+                        }
                     }
                     
                     const delSnap = await getDoc(doc(db, "config", "delegados"));
-                    if (delSnap.exists() && delSnap.data().emails && delSnap.data().emails.includes(user.email)) {
-                        isDelegado = true;
+                    if (delSnap.exists() && delSnap.data().emails) {
+                        if (delSnap.data().emails.includes(user.email)) isDelegado = true;
+                        if (delSnap.data().nombres) Object.assign(diccionarioNombres, delSnap.data().nombres);
+                        for (const key in delSnap.data()) {
+                            if (key.startsWith('nombres.')) diccionarioNombres[key.replace('nombres.', '')] = delSnap.data()[key];
+                        }
                     }
                 } catch (e) { console.error("Error verificando rol", e); }
 
@@ -345,6 +356,19 @@
                             </div>
                             
                             <div class="border-t border-gray-100 pt-3">
+                                <p class="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wide">Confirmar Asistencia</p>
+                                <div class="flex gap-2 mb-3">
+                                    <button onclick="window.marcarAsistencia('${evento.id}', true)" class="flex-1 py-2 px-3 rounded-lg font-bold text-sm transition-colors border border-transparent ${evento.asisten && evento.asisten.includes(currentUserEmail) ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-600'}">
+                                        <i class="fa-solid fa-check mr-1"></i> Voy a asistir
+                                    </button>
+                                    <button onclick="window.marcarAsistencia('${evento.id}', false)" class="flex-1 py-2 px-3 rounded-lg font-bold text-sm transition-colors border border-transparent ${evento.noAsisten && evento.noAsisten.includes(currentUserEmail) ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-red-50 hover:text-red-600'}">
+                                        <i class="fa-solid fa-xmark mr-1"></i> No voy a asistir
+                                    </button>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded-lg text-xs mb-3 border border-blue-100">
+                                    <p class="font-bold text-blue-800 mb-1"><i class="fa-solid fa-users mr-1"></i> Confirmados (${evento.asisten ? evento.asisten.length : 0}):</p>
+                                    <p class="text-blue-700 leading-relaxed">${(evento.asisten && evento.asisten.length > 0) ? evento.asisten.map(e => diccionarioNombres[e] || e.split('@')[0]).join(', ') : 'Nadie ha confirmado todavía'}</p>
+                                </div>
                                 <button onclick="window.descargarICS(${arrayIndex})" class="w-full flex justify-center items-center bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 border border-gray-200 rounded-lg shadow-sm transition-all text-sm">
                                     <i class="fa-regular fa-calendar-plus text-lista-azul mr-2 text-lg"></i> Agendar Recordatorio
                                 </button>
@@ -367,6 +391,28 @@
                 cargarEventos();
             } catch (e) {
                 alert("Error al borrar el evento.");
+            }
+        };
+
+        window.marcarAsistencia = async (eventoId, asiste) => {
+            if (!currentUserEmail) return;
+            try {
+                const docRef = doc(db, "eventos", eventoId);
+                if (asiste) {
+                    await updateDoc(docRef, {
+                        asisten: arrayUnion(currentUserEmail),
+                        noAsisten: arrayRemove(currentUserEmail)
+                    });
+                } else {
+                    await updateDoc(docRef, {
+                        asisten: arrayRemove(currentUserEmail),
+                        noAsisten: arrayUnion(currentUserEmail)
+                    });
+                }
+                cargarEventos();
+            } catch (e) {
+                console.error("Error al marcar asistencia", e);
+                alert("Hubo un error al guardar tu asistencia.");
             }
         };
 
