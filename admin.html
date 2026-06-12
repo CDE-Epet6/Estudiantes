@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Super Admin | Lista Azul</title>
+    <title>Panel de Secretario | Lista Azul</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -100,18 +100,20 @@
 
         <!-- ESTADO: AUTORIZADO (PANEL DE CONTROL) -->
         <div id="panel-admin" class="hidden w-full space-y-8">
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
+            <div id="seccion-gestor-admins" class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
                 <h3 class="text-xl font-bold text-gray-900 mb-2"><i
                         class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Administradores</h3>
                 <p class="text-sm text-gray-600 mb-6">Los correos en esta lista tendrán un tachito de basura habilitado
                     en la página de Votaciones para eliminar sugerencias inapropiadas.</p>
 
                 <!-- Formulario Agregar -->
-                <form id="form-add-admin" class="flex gap-2 mb-8">
+                <form id="form-add-admin" class="flex flex-col md:flex-row gap-2 mb-8">
+                    <input type="text" id="new-admin-name" required placeholder="Nombre y Apellido"
+                        class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
                     <input type="email" id="new-admin-email" required placeholder="correo@gmail.com"
                         class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
                     <button type="submit"
-                        class="text-white bg-green-600 hover:bg-green-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all"><i
+                        class="text-white bg-green-600 hover:bg-green-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all whitespace-nowrap"><i
                             class="fa-solid fa-plus mr-1"></i> Agregar</button>
                 </form>
 
@@ -133,11 +135,13 @@
                     para ver y administrar las reuniones y eventos oficiales.</p>
 
                 <!-- Formulario Agregar -->
-                <form id="form-add-delegado" class="flex gap-2 mb-8">
+                <form id="form-add-delegado" class="flex flex-col md:flex-row gap-2 mb-8">
+                    <input type="text" id="new-delegado-name" required placeholder="Nombre y Apellido"
+                        class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
                     <input type="email" id="new-delegado-email" required placeholder="correo_delegado@gmail.com"
                         class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
                     <button type="submit"
-                        class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all"><i
+                        class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all whitespace-nowrap"><i
                             class="fa-solid fa-plus mr-1"></i> Agregar</button>
                 </form>
 
@@ -204,6 +208,13 @@
                     pDenied.classList.add('hidden');
                     pAdmin.classList.remove('hidden');
                     navUser.classList.remove('hidden');
+                    
+                    if (user.email !== SUPER_ADMIN_EMAIL) {
+                        document.getElementById('seccion-gestor-admins')?.classList.add('hidden');
+                    } else {
+                        document.getElementById('seccion-gestor-admins')?.classList.remove('hidden');
+                    }
+
                     cargarListaAdmins();
                     cargarListaDelegados();
 
@@ -262,16 +273,22 @@
                         li.className = "flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-200";
 
                         const isSuperAdmin = email === SUPER_ADMIN_EMAIL;
-                        const badge = isSuperAdmin ? '<span class="ml-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded border border-yellow-300">Super Admin</span>' : '';
+                        const badge = isSuperAdmin ? '<span class="ml-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded border border-yellow-300">Secretario</span>' : '';
 
-                        // Botón de eliminar (oculto para el super admin)
+                        // Botón de eliminar (oculto para el Secretario)
                         const btnDelete = isSuperAdmin ?
                             '<div class="w-8"></div>' :
                             `<button onclick="window.removerAdmin('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
 
+                        const nombre = (docSnap.data().nombres && docSnap.data().nombres[email]) ? docSnap.data().nombres[email] : 'Sin nombre registrado';
+
                         li.innerHTML = `
                             <div class="flex items-center text-sm font-semibold text-gray-800">
-                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i> ${email} ${badge}
+                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i> 
+                                <div>
+                                    <span class="block">${nombre} ${badge}</span>
+                                    <span class="text-xs text-gray-500 font-normal">${email}</span>
+                                </div>
                             </div>
                             ${btnDelete}
                         `;
@@ -289,18 +306,24 @@
         // Agregar Admin
         document.getElementById('form-add-admin').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const input = document.getElementById('new-admin-email');
-            const email = input.value.trim().toLowerCase();
+            const inputEmail = document.getElementById('new-admin-email');
+            const inputName = document.getElementById('new-admin-name');
+            const email = inputEmail.value.trim().toLowerCase();
+            const nombre = inputName.value.trim();
 
-            if (email) {
+            if (email && nombre) {
                 const btn = e.target.querySelector('button');
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
                 try {
                     const docRef = doc(db, "config", "admins");
-                    await setDoc(docRef, { emails: arrayUnion(email) }, { merge: true });
-                    input.value = '';
+                    await setDoc(docRef, { 
+                        emails: arrayUnion(email),
+                        [`nombres.${email}`]: nombre 
+                    }, { merge: true });
+                    inputEmail.value = '';
+                    inputName.value = '';
                 } catch (error) {
                     console.error("Error agregando admin:", error);
                     alert("No se pudo agregar el administrador. Verificá tu conexión.");
@@ -347,9 +370,15 @@
                         // Botón de eliminar
                         const btnDelete = `<button onclick="window.removerDelegado('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
 
+                        const nombre = (docSnap.data().nombres && docSnap.data().nombres[email]) ? docSnap.data().nombres[email] : 'Sin nombre registrado';
+
                         li.innerHTML = `
                             <div class="flex items-center text-sm font-semibold text-gray-800">
-                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i> ${email}
+                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i>
+                                <div>
+                                    <span class="block">${nombre}</span>
+                                    <span class="text-xs text-gray-500 font-normal">${email}</span>
+                                </div>
                             </div>
                             ${btnDelete}
                         `;
@@ -367,18 +396,24 @@
         // Agregar Delegado
         document.getElementById('form-add-delegado').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const input = document.getElementById('new-delegado-email');
-            const email = input.value.trim().toLowerCase();
+            const inputEmail = document.getElementById('new-delegado-email');
+            const inputName = document.getElementById('new-delegado-name');
+            const email = inputEmail.value.trim().toLowerCase();
+            const nombre = inputName.value.trim();
 
-            if (email) {
+            if (email && nombre) {
                 const btn = e.target.querySelector('button');
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
                 try {
                     const docRef = doc(db, "config", "delegados");
-                    await setDoc(docRef, { emails: arrayUnion(email) }, { merge: true });
-                    input.value = '';
+                    await setDoc(docRef, { 
+                        emails: arrayUnion(email),
+                        [`nombres.${email}`]: nombre
+                    }, { merge: true });
+                    inputEmail.value = '';
+                    inputName.value = '';
                 } catch (error) {
                     console.error("Error agregando delegado:", error);
                     alert("No se pudo agregar el delegado. Verificá tu conexión.");
