@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Super Admin | Lista Azul</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-lista-azul {
+            background-color: #1e3a8a;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex flex-col min-h-screen text-gray-800">
+
+    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 flex items-center">
+                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
+                </div>
+                <div class="flex items-center space-x-2 text-yellow-400 font-bold tracking-wide">
+                    <i class="fa-solid fa-user-shield text-xl"></i>
+                    <span class="hidden md:inline">PANEL ADMINISTRATIVO</span>
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="index.html" class="hover:text-blue-200 transition-colors">Inicio</a>
+                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
+                <a href="buzon.html" class="hover:text-blue-200 transition-colors">Sugerencias</a>
+                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
+                <a id="nav-item-delegados" href="delegados.html"
+                    class="hidden hover:text-blue-200 transition-colors">Delegados</a>
+                <a id="nav-item-admin" href="admin.html"
+                    class="hidden text-yellow-100 cursor-default border-b-2 border-yellow-200 pb-1"><i
+                        class="fa-solid fa-gear mr-1"></i> Administración</a>
+            </nav>
+            <div id="nav-user" class="hidden flex items-center space-x-3">
+                <button id="btn-logout"
+                    class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold py-2 px-4 rounded-full transition-all">Salir</button>
+            </div>
+        </div>
+        <!-- Menú móvil simple -->
+        <div
+            class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
+            <a href="index.html" class="hover:text-blue-200 whitespace-nowrap">Inicio</a>
+            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
+            <a href="buzon.html" class="hover:text-blue-200 whitespace-nowrap">Sugerencias</a>
+            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
+            <a id="nav-mobile-delegados" href="delegados.html"
+                class="hidden hover:text-blue-200 whitespace-nowrap">Delegados</a>
+            <a id="nav-mobile-admin" href="admin.html"
+                class="hidden text-yellow-200 border-b border-yellow-200 whitespace-nowrap">Admin</a>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-3xl mx-auto px-4 py-12 flex flex-col items-center justify-center">
+
+        <!-- ESTADO: CARGANDO -->
+        <div id="panel-loading" class="text-center py-20 w-full">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-500 font-medium tracking-wide">Verificando credenciales de seguridad...</p>
+        </div>
+
+        <!-- ESTADO: REQUIERE LOGIN -->
+        <div id="panel-login"
+            class="hidden text-center w-full max-w-md bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+            <i class="fa-solid fa-lock text-5xl text-gray-300 mb-6"></i>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Área Restringida</h2>
+            <p class="text-gray-500 mb-8 text-sm">Este panel es de uso exclusivo para el Administrador de la plataforma.
+            </p>
+            <button id="btn-login-google"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                <i class="fa-brands fa-google text-lg"></i> Identificarse para entrar
+            </button>
+        </div>
+
+        <!-- ESTADO: DENEGADO -->
+        <div id="panel-denied"
+            class="hidden text-center w-full max-w-md bg-red-50 p-8 rounded-2xl shadow-lg border border-red-200">
+            <i class="fa-solid fa-ban text-5xl text-red-500 mb-6"></i>
+            <h2 class="text-2xl font-extrabold text-red-900 mb-2">Acceso Denegado</h2>
+            <p class="text-red-700 mb-8 text-sm font-medium">No formás parte del centro de estudiantes.</p>
+            <button id="btn-relogin"
+                class="bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-6 rounded-full transition-colors text-sm">
+                Intentar con otra cuenta
+            </button>
+        </div>
+
+        <!-- ESTADO: AUTORIZADO (PANEL DE CONTROL) -->
+        <div id="panel-admin" class="hidden w-full space-y-8">
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
+                <h3 class="text-xl font-bold text-gray-900 mb-2"><i
+                        class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Administradores</h3>
+                <p class="text-sm text-gray-600 mb-6">Los correos en esta lista tendrán un tachito de basura habilitado
+                    en la página de Votaciones para eliminar sugerencias inapropiadas.</p>
+
+                <!-- Formulario Agregar -->
+                <form id="form-add-admin" class="flex gap-2 mb-8">
+                    <input type="email" id="new-admin-email" required placeholder="correo@gmail.com"
+                        class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
+                    <button type="submit"
+                        class="text-white bg-green-600 hover:bg-green-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all"><i
+                            class="fa-solid fa-plus mr-1"></i> Agregar</button>
+                </form>
+
+                <!-- Lista de Admins -->
+                <div>
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 border-b pb-2">
+                        Administradores Actuales</h4>
+                    <ul id="admin-list" class="space-y-3">
+                        <!-- Items inyectados desde JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: GESTOR DE DELEGADOS -->
+            <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-bold text-gray-900 mb-2"><i class="fa-solid fa-users mr-2 text-blue-500"></i>
+                    Gestor de Delegados</h3>
+                <p class="text-sm text-gray-600 mb-6">Los correos en esta lista podrán entrar al "Portal de Delegados"
+                    para ver y administrar las reuniones y eventos oficiales.</p>
+
+                <!-- Formulario Agregar -->
+                <form id="form-add-delegado" class="flex gap-2 mb-8">
+                    <input type="email" id="new-delegado-email" required placeholder="correo_delegado@gmail.com"
+                        class="flex-grow bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 outline-none transition-all">
+                    <button type="submit"
+                        class="text-white bg-blue-600 hover:bg-blue-700 font-bold rounded-lg text-sm px-5 py-2.5 text-center shadow transition-all"><i
+                            class="fa-solid fa-plus mr-1"></i> Agregar</button>
+                </form>
+
+                <!-- Lista de Delegados -->
+                <div>
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 border-b pb-2">Delegados
+                        Actuales</h4>
+                    <ul id="delegado-list" class="space-y-3">
+                        <!-- Items inyectados desde JS -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="index.html" class="text-sm text-gray-500 hover:text-blue-600 font-medium underline"><i
+                        class="fa-solid fa-arrow-left mr-1"></i> Volver a Inicio</a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Firebase SDK (Módulos ES6) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // Configuración de Firebase - Lista Azul
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
+            authDomain: "lista-azul.firebaseapp.com",
+            projectId: "lista-azul",
+            storageBucket: "lista-azul.firebasestorage.app",
+            messagingSenderId: "306682622476",
+            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
+            measurementId: "G-1K9N1RFZES"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // UI Elements
+        const pLoading = document.getElementById('panel-loading');
+        const pLogin = document.getElementById('panel-login');
+        const pDenied = document.getElementById('panel-denied');
+        const pAdmin = document.getElementById('panel-admin');
+        const navUser = document.getElementById('nav-user');
+        const adminList = document.getElementById('admin-list');
+        const delegadoList = document.getElementById('delegado-list');
+
+        const SUPER_ADMIN_EMAIL = "xrodrice@gmail.com";
+
+        // Auth State Listener
+        onAuthStateChanged(auth, async (user) => {
+            pLoading.classList.add('hidden');
+
+            if (user) {
+                const adminDoc = await getDoc(doc(db, "config", "admins"));
+                if (adminDoc.exists() && adminDoc.data().emails && adminDoc.data().emails.includes(user.email)) {
+                    // Autorizado
+                    pLogin.classList.add('hidden');
+                    pDenied.classList.add('hidden');
+                    pAdmin.classList.remove('hidden');
+                    navUser.classList.remove('hidden');
+                    cargarListaAdmins();
+                    cargarListaDelegados();
+
+                    // Es Admin: Mostrar dashboard y menú de navegación
+                    document.getElementById('nav-item-admin')?.classList.remove('hidden');
+                    document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                    document.getElementById('nav-item-delegados')?.classList.remove('hidden');
+                    document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+                } else {
+                    // Denegado
+                    pLogin.classList.add('hidden');
+                    pAdmin.classList.add('hidden');
+                    pDenied.classList.remove('hidden');
+                    navUser.classList.remove('hidden');
+                }
+            } else {
+                // No hay usuario
+                pLogin.classList.remove('hidden');
+                pAdmin.classList.add('hidden');
+                pDenied.classList.add('hidden');
+                navUser.classList.add('hidden');
+            }
+        });
+
+        // Botón Iniciar Sesión
+        document.getElementById('btn-login-google').addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("Error en login:", error);
+                alert("No se pudo iniciar sesión.");
+            }
+        });
+
+        // Botón Cerrar Sesión
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Escuchar la lista de admins en tiempo real
+        function cargarListaAdmins() {
+            const docRef = doc(db, "config", "admins");
+
+            onSnapshot(docRef, (docSnap) => {
+                adminList.innerHTML = ''; // Limpiar lista
+                if (docSnap.exists() && docSnap.data().emails) {
+                    const emails = docSnap.data().emails;
+
+                    if (emails.length === 0) {
+                        adminList.innerHTML = '<li class="text-sm text-gray-500 italic">No hay administradores registrados.</li>';
+                        return;
+                    }
+
+                    emails.forEach(email => {
+                        const li = document.createElement('li');
+                        li.className = "flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-200";
+
+                        const isSuperAdmin = email === SUPER_ADMIN_EMAIL;
+                        const badge = isSuperAdmin ? '<span class="ml-2 bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded border border-yellow-300">Super Admin</span>' : '';
+
+                        // Botón de eliminar (oculto para el super admin)
+                        const btnDelete = isSuperAdmin ?
+                            '<div class="w-8"></div>' :
+                            `<button onclick="window.removerAdmin('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
+
+                        li.innerHTML = `
+                            <div class="flex items-center text-sm font-semibold text-gray-800">
+                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i> ${email} ${badge}
+                            </div>
+                            ${btnDelete}
+                        `;
+                        adminList.appendChild(li);
+                    });
+                } else {
+                    adminList.innerHTML = '<li class="text-sm text-gray-500 italic">No se encontró la configuración.</li>';
+                }
+            }, (error) => {
+                console.error("Error al escuchar admins:", error);
+                adminList.innerHTML = '<li class="text-sm text-red-500">Error de permisos. Asegurate de tener acceso a Firestore.</li>';
+            });
+        }
+
+        // Agregar Admin
+        document.getElementById('form-add-admin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('new-admin-email');
+            const email = input.value.trim().toLowerCase();
+
+            if (email) {
+                const btn = e.target.querySelector('button');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+                try {
+                    const docRef = doc(db, "config", "admins");
+                    await setDoc(docRef, { emails: arrayUnion(email) }, { merge: true });
+                    input.value = '';
+                } catch (error) {
+                    console.error("Error agregando admin:", error);
+                    alert("No se pudo agregar el administrador. Verificá tu conexión.");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Agregar';
+                }
+            }
+        });
+
+        // Función global para remover admin (llamada desde el HTML inyectado)
+        window.removerAdmin = async (email) => {
+            if (confirm(`¿Estás seguro de quitarle el permiso de ADMIN a ${email}?`)) {
+                try {
+                    const docRef = doc(db, "config", "admins");
+                    await updateDoc(docRef, {
+                        emails: arrayRemove(email)
+                    });
+                } catch (error) {
+                    console.error("Error removiendo admin:", error);
+                    alert("Hubo un error al eliminar.");
+                }
+            }
+        };
+
+        // Escuchar la lista de DELEGADOS en tiempo real
+        function cargarListaDelegados() {
+            const docRef = doc(db, "config", "delegados");
+
+            onSnapshot(docRef, (docSnap) => {
+                delegadoList.innerHTML = ''; // Limpiar lista
+                if (docSnap.exists() && docSnap.data().emails) {
+                    const emails = docSnap.data().emails;
+
+                    if (emails.length === 0) {
+                        delegadoList.innerHTML = '<li class="text-sm text-gray-500 italic">No hay delegados registrados.</li>';
+                        return;
+                    }
+
+                    emails.forEach(email => {
+                        const li = document.createElement('li');
+                        li.className = "flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-200";
+
+                        // Botón de eliminar
+                        const btnDelete = `<button onclick="window.removerDelegado('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
+
+                        li.innerHTML = `
+                            <div class="flex items-center text-sm font-semibold text-gray-800">
+                                <i class="fa-regular fa-envelope mr-3 text-gray-400"></i> ${email}
+                            </div>
+                            ${btnDelete}
+                        `;
+                        delegadoList.appendChild(li);
+                    });
+                } else {
+                    delegadoList.innerHTML = '<li class="text-sm text-gray-500 italic">No hay delegados registrados.</li>';
+                }
+            }, (error) => {
+                console.error("Error al escuchar delegados:", error);
+                delegadoList.innerHTML = '<li class="text-sm text-red-500">Error de permisos. Asegurate de tener acceso a Firestore.</li>';
+            });
+        }
+
+        // Agregar Delegado
+        document.getElementById('form-add-delegado').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const input = document.getElementById('new-delegado-email');
+            const email = input.value.trim().toLowerCase();
+
+            if (email) {
+                const btn = e.target.querySelector('button');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+                try {
+                    const docRef = doc(db, "config", "delegados");
+                    await setDoc(docRef, { emails: arrayUnion(email) }, { merge: true });
+                    input.value = '';
+                } catch (error) {
+                    console.error("Error agregando delegado:", error);
+                    alert("No se pudo agregar el delegado. Verificá tu conexión.");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-plus mr-1"></i> Agregar';
+                }
+            }
+        });
+
+        // Función global para remover delegado
+        window.removerDelegado = async (email) => {
+            if (confirm(`¿Estás seguro de quitarle el acceso de DELEGADO a ${email}?`)) {
+                try {
+                    const docRef = doc(db, "config", "delegados");
+                    await updateDoc(docRef, {
+                        emails: arrayRemove(email)
+                    });
+                } catch (error) {
+                    console.error("Error removiendo delegado:", error);
+                    alert("Hubo un error al eliminar.");
+                }
+            }
+        };
+
+    </script>
+</body>
+
+</html>

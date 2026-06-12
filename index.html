@@ -9,14 +9,33 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
         .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
+            animation: fadeIn 0.6s ease-out forwards;
         }
 
         .slide-up {
-            animation: slideUp 0.5s ease-out forwards;
+            opacity: 0;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
         }
 
         @keyframes fadeIn {
@@ -32,7 +51,7 @@
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
 
             to {
@@ -48,140 +67,286 @@
         .text-lista-azul {
             color: #1d4ed8;
         }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
     </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
 
     <!-- Navegación Superior -->
-    <header class="bg-lista-azul text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img src="image_b63323.jpg" alt="Logo EPET 6"
-                    class="h-10 w-10 object-cover rounded-full border-2 border-white bg-white">
-                <div>
-                    <h1 class="text-xl font-bold leading-tight">EPET N°6</h1>
-                    <p class="text-xs text-blue-200 font-semibold tracking-wider">LISTA AZUL</p>
+    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 flex items-center">
+                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
                 </div>
             </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="index.html" class="text-blue-200 cursor-default border-b-2 border-blue-200 pb-1">Inicio</a>
+                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
+                <a href="buzon.html" class="hover:text-blue-200 transition-colors">Sugerencias</a>
+                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
+                <a id="nav-item-delegados" href="delegados.html" class="hidden hover:text-blue-200 transition-colors">Delegados</a>
+                <a id="nav-item-admin" href="admin.html" class="hidden hover:text-yellow-300 transition-colors text-yellow-100"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
+            </nav>
             <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
-                class="hover:text-blue-200 transition-colors">
-                <i class="fa-brands fa-instagram text-2xl"></i>
+                class="hover:text-blue-200 transition-colors transform hover:scale-110 duration-200">
+                <i class="fa-brands fa-instagram text-3xl"></i>
             </a>
+        </div>
+        <!-- Menú móvil simple -->
+        <div class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
+            <a href="index.html" class="text-blue-200 border-b border-blue-200 whitespace-nowrap">Inicio</a>
+            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
+            <a href="buzon.html" class="hover:text-blue-200 whitespace-nowrap">Sugerencias</a>
+            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
+            <a id="nav-mobile-delegados" href="delegados.html" class="hidden hover:text-blue-200 whitespace-nowrap">Delegados</a>
+            <a id="nav-mobile-admin" href="admin.html" class="hidden text-yellow-200 whitespace-nowrap">Admin</a>
         </div>
     </header>
 
     <!-- Contenido Principal -->
-    <main class="flex-grow max-w-4xl mx-auto w-full px-4 py-8">
-        <section class="fade-in">
-            <div class="bg-white rounded-xl shadow-md p-6 slide-up border-t-4 border-lista-azul">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-800">Buzón de Ideas</h2>
-                    <p class="text-gray-500 mt-2 text-sm">Tu voz importa. Dejanos tu sugerencia, queja o propuesta para
-                        mejorar la EPET.</p>
+    <main class="flex-grow w-full">
+
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-br from-blue-800 to-blue-500 text-white py-20 px-4 relative overflow-hidden">
+            <div class="absolute inset-0 bg-black opacity-10"></div>
+            <div class="max-w-4xl mx-auto text-center relative z-10 fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">Construyamos juntos la escuela que
+                    queremos</h2>
+                <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto font-light">
+                    El Centro de Estudiantes es tu espacio. Participá, proponé ideas y seamos parte del cambio en la
+                    EPET 6.
+                </p>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <a href="buzon.html"
+                        class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all transform hover:-translate-y-1">
+                        Dejar una Idea
+                    </a>
+                    <a href="votacion.html"
+                        class="inline-block bg-blue-700 bg-opacity-40 border border-blue-400 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition-all transform hover:-translate-y-1">
+                        Votar Propuestas
+                    </a>
                 </div>
-
-                <form id="form-sugerencias" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nombre (Opcional)</label>
-                            <input type="text" id="nombre"
-                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                                placeholder="Ej: Juan Pérez">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Curso / Año</label>
-                            <input type="text" id="curso"
-                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                                placeholder="Ej: 4to 1ra">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Tu Sugerencia *</label>
-                        <textarea id="mensaje" required rows="4"
-                            class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
-                            placeholder="Escribí acá tu idea o reclamo..."></textarea>
-                    </div>
-
-                    <button type="submit" id="btn-submit"
-                        class="w-full bg-lista-azul hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg transition-colors flex justify-center items-center shadow-md">
-                        <i class="fa-regular fa-paper-plane mr-2"></i> Enviar Sugerencia
-                    </button>
-
-                    <div id="msg-exito"
-                        class="hidden bg-green-100 text-green-700 p-3 rounded-lg text-sm text-center font-medium mt-2">
-                        ¡Enviado con éxito! Gracias por sumar.
-                    </div>
-                    <div id="msg-error"
-                        class="hidden bg-red-100 text-red-700 p-3 rounded-lg text-sm text-center font-medium mt-2">
-                        Hubo un error al enviar. Intentá de nuevo.
-                    </div>
-                </form>
             </div>
         </section>
+
+        <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
+
+            <!-- Cuenta Regresiva -->
+            <section
+                class="slide-up delay-100 bg-blue-600 text-white p-8 md:p-12 rounded-3xl shadow-lg border border-blue-500 text-center relative overflow-hidden">
+                <!-- Decoración -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-5 rounded-full"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-white opacity-5 rounded-full"></div>
+
+                <div class="relative z-10">
+                    <span
+                        class="inline-block py-1 px-3 rounded-full bg-blue-500 text-white text-xs font-bold uppercase tracking-wider mb-4 border border-blue-400">18
+                        de Junio de 2026</span>
+                    <h3 class="text-3xl md:text-4xl font-bold mb-3">¡Las elecciones se acercan!</h3>
+                    <p class="text-blue-100 mb-10 text-lg">Tu voto decide el futuro de la escuela. Construyamos juntos
+                        una mejor EPET 6.</p>
+
+                    <div class="flex flex-wrap justify-center gap-4 text-center" id="countdown">
+                        <div
+                            class="bg-white text-blue-700 rounded-2xl p-4 w-24 md:w-28 shadow-md transform hover:scale-105 transition-transform">
+                            <span id="cd-days" class="text-4xl font-extrabold block">00</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Días</span>
+                        </div>
+                        <div
+                            class="bg-white text-blue-700 rounded-2xl p-4 w-24 md:w-28 shadow-md transform hover:scale-105 transition-transform">
+                            <span id="cd-hours" class="text-4xl font-extrabold block">00</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Horas</span>
+                        </div>
+                        <div
+                            class="bg-white text-blue-700 rounded-2xl p-4 w-24 md:w-28 shadow-md transform hover:scale-105 transition-transform">
+                            <span id="cd-minutes" class="text-4xl font-extrabold block">00</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Min</span>
+                        </div>
+                        <div
+                            class="bg-white text-blue-700 rounded-2xl p-4 w-24 md:w-28 shadow-md transform hover:scale-105 transition-transform">
+                            <span id="cd-seconds" class="text-4xl font-extrabold block">00</span>
+                            <span class="text-xs font-bold uppercase tracking-wider text-blue-500">Seg</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quiénes Somos y El Equipo -->
+            <section class="slide-up delay-100 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 text-center">
+                <div class="max-w-4xl mx-auto space-y-12">
+                    <!-- Introducción -->
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-blue-600 pb-2 mb-6">Quiénes Somos</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                            Somos la <strong>Lista Azul</strong>, un equipo conformado por alumnos de distintas especialidades y años. Nuestro objetivo principal es representar tu voz ante los directivos y mejorar el día a día en la técnica.
+                        </p>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            Creemos en la transparencia, el compañerismo y el trabajo constante para tener la escuela que merecemos.
+                        </p>
+                    </div>
+
+                    <!-- Equipo Principal -->
+                    <div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-8">El Equipo</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-crown text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Tiago Boscarol</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Presidente</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-handshake-angle text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Atila Lanfquen</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Vicepresidente</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-sack-dollar text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Tiziano Funes</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Tesorero</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-file-signature text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Rodrigo Araya</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Secretario</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vocales -->
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                        <h4 class="text-xl font-bold text-gray-800 mb-6"><i class="fa-solid fa-users text-blue-500 mr-2"></i> Vocales</h4>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agostina Garcia</span>
+                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Franco Panizza</span>
+                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Matias Segura</span>
+                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agustin Traipe</span>
+                            <span class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Leonel Cordoba</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+        </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-6 mt-auto">
-        <div class="max-w-4xl mx-auto px-4 flex flex-col items-center">
-            <p class="text-xs mt-2">&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén</p>
+    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-12 border-t-4 border-blue-600">
+        <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <h4 class="mb-4">
+                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity">
+                </h4>
+                <p class="text-sm text-gray-400">Trabajando todos los días para hacer de la EPET 6 un lugar mejor para
+                    todos los estudiantes.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-lg mb-4">Contacto Rápido</h4>
+                <ul class="space-y-2 text-sm">
+                    <li>
+                        <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank"
+                            class="hover:text-white transition-colors flex items-center">
+                            <i class="fa-brands fa-instagram w-6"></i> @cde.epet6.listaazul
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-bold text-lg mb-4">Enlaces Útiles</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="propuestas.html" class="hover:text-white transition-colors">Nuestras Propuestas</a></li>
+                    <li><a href="buzon.html" class="hover:text-white transition-colors">Dejar una Sugerencia</a></li>
+                    <li><a href="votacion.html" class="hover:text-white transition-colors">Votar Ideas</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+            <p>&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén.</p>
+            <p class="mt-2 md:mt-0 flex items-center gap-2">Diseñado por estudiantes para estudiantes. <a href="admin.html" class="hover:text-gray-300 transition-colors ml-1" title="Acceso Administrativo"><i class="fa-solid fa-lock text-gray-700 hover:text-gray-400"></i></a></p>
         </div>
     </footer>
 
-    <!-- Lógica Webhook -->
+    <!-- Lógica Webhook & Anti-Spam -->
+
+    <!-- Lógica de Cuenta Regresiva -->
     <script>
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1511202993880436846/W0j_NPm1yFDuWCTst6edvf96je7K_TAe8Kx8AfVj0S_uE5plPHxzCspcuFDqi2uVKcyF";
+        // --- Lógica de Cuenta Regresiva ---
+        const electionDate = new Date('2026-06-18T00:00:00').getTime();
 
-        document.getElementById('form-sugerencias').addEventListener('submit', async function (e) {
-            e.preventDefault();
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = electionDate - now;
 
-            const btnSubmit = document.getElementById('btn-submit');
-            const msgExito = document.getElementById('msg-exito');
-            const msgError = document.getElementById('msg-error');
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').innerHTML = '<div class="text-2xl md:text-3xl font-extrabold w-full text-white bg-blue-700 py-4 px-6 rounded-xl border-2 border-blue-400 animate-pulse">¡Llegó el día! Acercate a votar por la Lista Azul. 🗳️</div>';
+                return;
+            }
 
-            const nombre = document.getElementById('nombre').value || "Anónimo";
-            const curso = document.getElementById('curso').value || "No especificado";
-            const mensaje = document.getElementById('mensaje').value;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
-            btnSubmit.disabled = true;
-            msgExito.classList.add('hidden');
-            msgError.classList.add('hidden');
+            document.getElementById('cd-days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('cd-hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('cd-minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('cd-seconds').innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
 
-            const payload = {
-                content: null,
-                embeds: [{
-                    title: "📨 Nueva Sugerencia Recibida",
-                    color: 1920472,
-                    fields: [
-                        { name: "👤 Estudiante", value: nombre, inline: true },
-                        { name: "🏫 Curso", value: curso, inline: true },
-                        { name: "📝 Mensaje", value: mensaje }
-                    ],
-                    footer: { text: "Buzón Web Lista Azul EPET 6" },
-                    timestamp: new Date().toISOString()
-                }]
-            };
 
-            try {
-                const response = await fetch(DISCORD_WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
+    </script>
 
-                if (response.ok) {
-                    msgExito.classList.remove('hidden');
-                    document.getElementById('form-sugerencias').reset();
-                } else {
-                    msgError.classList.remove('hidden');
-                }
-            } catch (error) {
-                msgError.classList.remove('hidden');
-            } finally {
-                btnSubmit.innerHTML = '<i class="fa-regular fa-paper-plane mr-2"></i> Enviar Sugerencia';
-                btnSubmit.disabled = false;
+    <!-- Firebase Auth para menú dinámico -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
+            authDomain: "lista-azul.firebaseapp.com",
+            projectId: "lista-azul",
+            storageBucket: "lista-azul.firebasestorage.app",
+            messagingSenderId: "306682622476",
+            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
+            measurementId: "G-1K9N1RFZES"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user && !user.isAnonymous) {
+                try {
+                    const adminDoc = await getDoc(doc(db, "config", "admins"));
+                    let isAdmin = false;
+                    if (adminDoc.exists() && adminDoc.data().emails && adminDoc.data().emails.includes(user.email)) {
+                        isAdmin = true;
+                    }
+
+                    if (isAdmin) {
+                        document.getElementById('nav-item-admin')?.classList.remove('hidden');
+                        document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                        document.getElementById('nav-item-delegados')?.classList.remove('hidden');
+                        document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+                    } else {
+                        const delSnap = await getDoc(doc(db, "config", "delegados"));
+                        if (delSnap.exists() && delSnap.data().emails && delSnap.data().emails.includes(user.email)) {
+                            document.getElementById('nav-item-delegados')?.classList.remove('hidden');
+                            document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+                        }
+                    }
+                } catch(e) { console.error("Error verificando permisos", e); }
             }
         });
     </script>

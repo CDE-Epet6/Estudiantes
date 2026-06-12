@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Delegados | EPET 6</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-lista-azul { background-color: #1d4ed8; }
+        .text-lista-azul { color: #1d4ed8; }
+        .slide-up { animation: slideUp 0.5s ease-out forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Navegación Superior -->
+    <header class="bg-lista-azul text-white shadow-xl sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 flex items-center">
+                    <img src="logosinfondo.avif" alt="Logo Lista Azul" class="h-12 w-auto drop-shadow-sm">
+                </div>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+                <a href="index.html" class="hover:text-blue-200 transition-colors">Inicio</a>
+                <a href="propuestas.html" class="hover:text-blue-200 transition-colors">Propuestas</a>
+                <a href="buzon.html" class="hover:text-blue-200 transition-colors">Sugerencias</a>
+                <a href="votacion.html" class="hover:text-blue-200 transition-colors">Votaciones</a>
+                <a id="nav-item-delegados" href="delegados.html" class="hidden text-blue-200 cursor-default border-b-2 border-blue-200 pb-1"><i class="fa-solid fa-users mr-1"></i> Delegados</a>
+                <a id="nav-item-admin" href="admin.html" class="hidden hover:text-yellow-300 transition-colors text-yellow-100"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
+            </nav>
+            <div id="user-menu" class="flex items-center">
+                <!-- Login info -->
+            </div>
+        </div>
+        <!-- Menú móvil simple -->
+        <div class="md:hidden bg-blue-800 flex justify-center space-x-4 py-2 text-xs font-semibold overflow-x-auto px-2">
+            <a href="index.html" class="hover:text-blue-200 whitespace-nowrap">Inicio</a>
+            <a href="propuestas.html" class="hover:text-blue-200 whitespace-nowrap">Propuestas</a>
+            <a href="buzon.html" class="hover:text-blue-200 whitespace-nowrap">Sugerencias</a>
+            <a href="votacion.html" class="hover:text-blue-200 whitespace-nowrap">Votaciones</a>
+            <a id="nav-mobile-delegados" href="delegados.html" class="hidden text-blue-200 border-b border-blue-200 whitespace-nowrap">Delegados</a>
+            <a id="nav-mobile-admin" href="admin.html" class="hidden text-yellow-200 whitespace-nowrap">Admin</a>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto px-4 py-12">
+
+        <!-- ESTADO: CARGANDO -->
+        <div id="panel-loading" class="text-center py-20 w-full">
+            <i class="fa-solid fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+            <p class="text-gray-500 font-medium tracking-wide">Verificando acceso a la agenda...</p>
+        </div>
+
+        <!-- ESTADO: REQUIERE LOGIN -->
+        <div id="panel-login" class="hidden text-center w-full max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+            <i class="fa-solid fa-users text-5xl text-blue-300 mb-6"></i>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-2">Portal de Delegados</h2>
+            <p class="text-gray-500 mb-8 text-sm">Iniciá sesión para ver la agenda oficial de reuniones y eventos.</p>
+            <button id="btn-login-google" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-transform transform hover:-translate-y-0.5 flex items-center justify-center gap-3">
+                <i class="fa-brands fa-google text-lg"></i> Iniciar Sesión con Google
+            </button>
+        </div>
+
+        <!-- ESTADO: DENEGADO -->
+        <div id="panel-denied" class="hidden text-center w-full max-w-md mx-auto bg-red-50 p-8 rounded-2xl shadow-lg border border-red-200">
+            <i class="fa-solid fa-ban text-5xl text-red-500 mb-6"></i>
+            <h2 class="text-2xl font-extrabold text-red-900 mb-2">Acceso Restringido</h2>
+            <p class="text-red-700 mb-8 text-sm font-medium">No formás parte del centro de estudiantes ni sos delegado oficial.</p>
+            <p class="text-xs text-gray-500">Pedile al administrador que agregue tu correo en el Panel Maestro.</p>
+        </div>
+
+        <!-- ESTADO: AUTORIZADO (AGENDA) -->
+        <div id="panel-agenda" class="hidden w-full space-y-8">
+            <div class="flex justify-between items-center border-b-2 border-gray-200 pb-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Agenda Oficial</h2>
+                <button id="btn-nuevo-evento" onclick="abrirCreador()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow transition-colors flex items-center">
+                    <i class="fa-solid fa-plus-circle mr-2"></i> Nuevo
+                </button>
+            </div>
+
+            <!-- CREADOR DE EVENTOS (Oculto) -->
+            <section id="editor-evento" class="hidden slide-up bg-blue-50 p-6 rounded-xl border-2 border-lista-azul shadow-md">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="titulo-panel" class="font-bold text-lg text-lista-azul"><i class="fa-solid fa-calendar-plus mr-2"></i>Crear Nuevo Evento</h3>
+                    <button onclick="cerrarEditor()" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+
+                <form id="form-evento" class="space-y-4">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">MES</label>
+                            <select id="ev-mes" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500 uppercase bg-white">
+                                <option value="Enero">Enero</option>
+                                <option value="Febrero">Febrero</option>
+                                <option value="Marzo">Marzo</option>
+                                <option value="Abril">Abril</option>
+                                <option value="Mayo">Mayo</option>
+                                <option value="Junio">Junio</option>
+                                <option value="Julio">Julio</option>
+                                <option value="Agosto">Agosto</option>
+                                <option value="Septiembre">Septiembre</option>
+                                <option value="Octubre">Octubre</option>
+                                <option value="Noviembre">Noviembre</option>
+                                <option value="Diciembre">Diciembre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">DÍA</label>
+                            <input type="number" id="ev-dia" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" min="1" max="31">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">HORA (Ej: 10:30)</label>
+                            <input type="text" id="ev-hora" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500" placeholder="00:00">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">LUGAR</label>
+                            <input type="text" id="ev-lugar" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">TÍTULO DEL EVENTO</label>
+                        <input type="text" id="ev-titulo" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">TEMARIO / DESCRIPCIÓN</label>
+                        <textarea id="ev-temario" required rows="3" class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <button type="submit" id="btn-submit-evento" class="w-full bg-lista-azul hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow">
+                        <i class="fa-solid fa-plus mr-2"></i> Publicar Evento
+                    </button>
+                </form>
+            </section>
+
+            <!-- CONTENEDOR DE EVENTOS -->
+            <section id="contenedor-eventos" class="space-y-4">
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 pt-12 pb-6 mt-auto border-t-4 border-blue-600 text-center text-sm">
+        <p class="flex justify-center items-center gap-2">&copy; 2026 Centro de Estudiantes EPET N°6 - Neuquén. <a href="admin.html" class="hover:text-white transition-colors" title="Acceso Administrativo"><i class="fa-solid fa-lock text-gray-700 hover:text-gray-400"></i></a></p>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, orderBy, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDPsCYwxqCb7OvF99j7SZQmSpaYeObZoVw",
+            authDomain: "lista-azul.firebaseapp.com",
+            projectId: "lista-azul",
+            storageBucket: "lista-azul.firebasestorage.app",
+            messagingSenderId: "306682622476",
+            appId: "1:306682622476:web:a8388180a8ac4f84fc3429",
+            measurementId: "G-1K9N1RFZES"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+
+        // UI
+        const pLoading = document.getElementById('panel-loading');
+        const pLogin = document.getElementById('panel-login');
+        const pDenied = document.getElementById('panel-denied');
+        const pAgenda = document.getElementById('panel-agenda');
+        const userMenu = document.getElementById('user-menu');
+        const contenedorEventos = document.getElementById('contenedor-eventos');
+        const editorEvento = document.getElementById('editor-evento');
+        const formEvento = document.getElementById('form-evento');
+
+        let eventosGlobales = [];
+        let eventoEditandoId = null;
+
+        onAuthStateChanged(auth, async (user) => {
+            pLoading.classList.add('hidden');
+            
+            if (user) {
+                // UI navbar
+                const nombre = user.displayName ? user.displayName.split(' ')[0] : 'Usuario';
+                const foto = user.photoURL || 'https://ui-avatars.com/api/?name=' + nombre;
+                userMenu.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-semibold text-gray-200 hidden md:inline">${nombre}</span>
+                        <img src="${foto}" alt="Perfil" class="w-8 h-8 rounded-full border border-gray-500">
+                        <button id="btn-logout" class="text-xs text-red-400 font-bold hover:text-red-300 ml-2"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+                    </div>
+                `;
+                document.getElementById('btn-logout').addEventListener('click', () => signOut(auth));
+
+                // Verificar Rol
+                let isDelegado = false;
+                window.currentUserIsAdmin = false;
+
+                try {
+                    const admSnap = await getDoc(doc(db, "config", "admins"));
+                    if (admSnap.exists() && admSnap.data().emails && admSnap.data().emails.includes(user.email)) {
+                        window.currentUserIsAdmin = true;
+                    }
+                    
+                    const delSnap = await getDoc(doc(db, "config", "delegados"));
+                    if (delSnap.exists() && delSnap.data().emails && delSnap.data().emails.includes(user.email)) {
+                        isDelegado = true;
+                    }
+                } catch (e) { console.error("Error verificando rol", e); }
+
+                const isAuthorized = window.currentUserIsAdmin || isDelegado;
+
+                if (isAuthorized) {
+                    pLogin.classList.add('hidden');
+                    pDenied.classList.add('hidden');
+                    pAgenda.classList.remove('hidden');
+                    
+                    document.getElementById('nav-item-delegados')?.classList.remove('hidden');
+                    document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+
+                    if (window.currentUserIsAdmin) {
+                        document.getElementById('nav-item-admin')?.classList.remove('hidden');
+                        document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                        document.getElementById('btn-nuevo-evento')?.classList.remove('hidden');
+                    }
+                    
+                    cargarEventos();
+                } else {
+                    pLogin.classList.add('hidden');
+                    pAgenda.classList.add('hidden');
+                    pDenied.classList.remove('hidden');
+                }
+            } else {
+                userMenu.innerHTML = '';
+                pLogin.classList.remove('hidden');
+                pAgenda.classList.add('hidden');
+                pDenied.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('btn-login-google').addEventListener('click', () => {
+            signInWithPopup(auth, provider);
+        });
+
+        // ==========================================
+        // FUNCIONES DEL CREADOR
+        // ==========================================
+        window.abrirCreador = () => {
+            eventoEditandoId = null;
+            formEvento.reset();
+            document.getElementById('titulo-panel').innerHTML = '<i class="fa-solid fa-calendar-plus mr-2"></i>Crear Nuevo Evento';
+            document.getElementById('btn-submit-evento').innerHTML = '<i class="fa-solid fa-plus mr-2"></i>Publicar Evento';
+            editorEvento.classList.remove('hidden');
+            editorEvento.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.cerrarEditor = () => {
+            editorEvento.classList.add('hidden');
+            eventoEditandoId = null;
+        };
+
+        window.abrirEditor = (index) => {
+            const evento = eventosGlobales[index];
+            eventoEditandoId = evento.id;
+            
+            document.getElementById('ev-mes').value = evento.Mes;
+            document.getElementById('ev-dia').value = evento.Dia;
+            document.getElementById('ev-hora').value = evento.Hora;
+            document.getElementById('ev-lugar').value = evento.Lugar;
+            document.getElementById('ev-titulo').value = evento.Titulo;
+            document.getElementById('ev-temario').value = evento.Temario;
+
+            document.getElementById('titulo-panel').innerHTML = '<i class="fa-solid fa-pen mr-2"></i>Editar Evento';
+            document.getElementById('btn-submit-evento').innerHTML = '<i class="fa-solid fa-save mr-2"></i>Guardar Cambios';
+            editorEvento.classList.remove('hidden');
+            editorEvento.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        // ==========================================
+        // FIREBASE CRUD
+        // ==========================================
+        async function cargarEventos() {
+            contenedorEventos.innerHTML = '<div class="text-center py-10"><i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-lista-azul"></i><p class="text-gray-500">Cargando agenda...</p></div>';
+            
+            try {
+                // Leer eventos ordenados por fecha de creación
+                const q = query(collection(db, "eventos"));
+                const querySnapshot = await getDocs(q);
+                
+                contenedorEventos.innerHTML = '';
+                eventosGlobales = [];
+
+                if (querySnapshot.empty) {
+                    contenedorEventos.innerHTML = '<p class="text-center text-gray-500 py-10 bg-white rounded-xl border border-gray-200">No hay eventos programados.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    eventosGlobales.push(data);
+                });
+
+                // Invertimos para ver los más nuevos primero si no hay ordenamiento específico
+                eventosGlobales.reverse().forEach((evento, arrayIndex) => {
+                    const adminButtons = window.currentUserIsAdmin ? `
+                            <div class="absolute top-3 right-3 flex gap-3">
+                                <button onclick="window.abrirEditor(${arrayIndex})" class="text-gray-300 hover:text-blue-500 transition-colors" title="Editar evento">
+                                    <i class="fa-solid fa-pen text-lg"></i>
+                                </button>
+                                <button onclick="window.borrarEvento('${evento.id}')" class="text-gray-300 hover:text-red-500 transition-colors" title="Borrar evento">
+                                    <i class="fa-solid fa-trash text-lg"></i>
+                                </button>
+                            </div>` : '';
+
+                    const tarjeta = `
+                        <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-lista-azul slide-up flex flex-col gap-4 relative">
+                            ${adminButtons}
+
+                            <div class="flex gap-4 pr-16">
+                                <div class="flex flex-col items-center justify-center bg-blue-50 text-lista-azul rounded-lg p-3 min-w-[70px] h-fit">
+                                    <span class="text-xs font-bold uppercase tracking-wider">${evento.Mes.substring(0, 3)}</span>
+                                    <span class="text-2xl font-black">${evento.Dia}</span>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-bold text-gray-900">${evento.Titulo}</h3>
+                                    <p class="text-gray-600 text-sm mt-1"><i class="fa-solid fa-clock mr-1 text-gray-400"></i> ${evento.Hora} hs</p>
+                                    <p class="text-gray-600 text-sm"><i class="fa-solid fa-location-dot mr-1 text-gray-400"></i> ${evento.Lugar}</p>
+                                    <div class="mt-3 bg-gray-50 p-3 rounded border border-gray-100">
+                                        <p class="text-gray-700 text-sm font-semibold mb-1">Temario:</p>
+                                        <p class="text-gray-500 text-sm whitespace-pre-wrap">${evento.Temario}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="border-t border-gray-100 pt-3">
+                                <button onclick="window.descargarICS(${arrayIndex})" class="w-full flex justify-center items-center bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 border border-gray-200 rounded-lg shadow-sm transition-all text-sm">
+                                    <i class="fa-regular fa-calendar-plus text-lista-azul mr-2 text-lg"></i> Agendar Recordatorio
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    contenedorEventos.insertAdjacentHTML('beforeend', tarjeta);
+                });
+
+            } catch (error) {
+                console.error(error);
+                contenedorEventos.innerHTML = '<p class="text-center text-red-500 py-10">Hubo un error al conectar con Firebase.</p>';
+            }
+        }
+
+        window.borrarEvento = async (id) => {
+            if (!confirm("⚠️ ¿Seguro que querés borrar este evento de la agenda de todos los delegados?")) return;
+            try {
+                await deleteDoc(doc(db, "eventos", id));
+                cargarEventos();
+            } catch (e) {
+                alert("Error al borrar el evento.");
+            }
+        };
+
+        formEvento.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-evento');
+            
+            const datos = {
+                Mes: document.getElementById('ev-mes').value,
+                Dia: document.getElementById('ev-dia').value,
+                Hora: document.getElementById('ev-hora').value,
+                Lugar: document.getElementById('ev-lugar').value,
+                Titulo: document.getElementById('ev-titulo').value,
+                Temario: document.getElementById('ev-temario').value
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Guardando...';
+
+            try {
+                if (eventoEditandoId) {
+                    await updateDoc(doc(db, "eventos", eventoEditandoId), datos);
+                } else {
+                    datos.timestamp = Date.now();
+                    await addDoc(collection(db, "eventos"), datos);
+                }
+                window.cerrarEditor();
+                cargarEventos();
+            } catch (error) {
+                console.error(error);
+                alert("Hubo un error al guardar.");
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // ==========================================
+        // DESCARGAR CALENDARIO (.ICS)
+        // ==========================================
+        window.descargarICS = (index) => {
+            const evento = eventosGlobales[index];
+            const MESES_NUM = { "ENERO": "01", "FEBRERO": "02", "MARZO": "03", "ABRIL": "04", "MAYO": "05", "JUNIO": "06", "JULIO": "07", "AGOSTO": "08", "SEPTIEMBRE": "09", "OCTUBRE": "10", "NOVIEMBRE": "11", "DICIEMBRE": "12" };
+
+            const mesText = evento.Mes ? evento.Mes.trim().toUpperCase() : "ENERO";
+            const mesNum = MESES_NUM[mesText] || "01";
+            const diaNum = evento.Dia;
+
+            let horaStr = evento.Hora || "00:00";
+            if (!horaStr.includes(':')) horaStr = "00:00";
+            let [h, m] = horaStr.split(':');
+
+            const fechaInicio = new Date(2026, parseInt(mesNum) - 1, parseInt(diaNum), parseInt(h), parseInt(m));
+            const fechaFin = new Date(fechaInicio.getTime() + (60 * 60 * 1000));
+
+            const formatoICS = (fecha) => {
+                const pad = (n) => String(n).padStart(2, '0');
+                return `${fecha.getFullYear()}${pad(fecha.getMonth() + 1)}${pad(fecha.getDate())}T${pad(fecha.getHours())}${pad(fecha.getMinutes())}00`;
+            };
+
+            const icsMSG =
+                "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//EPET6//CentroEstudiantes//ES\nBEGIN:VEVENT\n" +
+                "DTSTART:" + formatoICS(fechaInicio) + "\n" +
+                "DTEND:" + formatoICS(fechaFin) + "\n" +
+                "SUMMARY:EPET 6: " + evento.Titulo + "\n" +
+                "DESCRIPTION:" + evento.Temario.replace(/\n/g, '\\n') + "\n" +
+                "LOCATION:" + evento.Lugar + "\n" +
+                "END:VEVENT\nEND:VCALENDAR";
+
+            const blob = new Blob([icsMSG], { type: 'text/calendar;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "evento_epet6.ics";
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        };
+    </script>
+</body>
+</html>
