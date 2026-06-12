@@ -100,9 +100,10 @@
 
         <!-- ESTADO: AUTORIZADO (PANEL DE CONTROL) -->
         <div id="panel-admin" class="hidden w-full space-y-8">
-            <div id="seccion-gestor-admins" class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
+            <div id="seccion-gestor-admins"
+                class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 border-t-4 border-t-yellow-400">
                 <h3 class="text-xl font-bold text-gray-900 mb-2"><i
-                        class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Administradores</h3>
+                        class="fa-solid fa-users-gear mr-2 text-yellow-500"></i> Gestor de Centero de estudiantes</h3>
                 <p class="text-sm text-gray-600 mb-6">Los correos en esta lista tendrán un tachito de basura habilitado
                     en la página de Votaciones para eliminar sugerencias inapropiadas.</p>
 
@@ -120,7 +121,7 @@
                 <!-- Lista de Admins -->
                 <div>
                     <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 border-b pb-2">
-                        Administradores Actuales</h4>
+                        Personas del centro de estudiantes Actuales</h4>
                     <ul id="admin-list" class="space-y-3">
                         <!-- Items inyectados desde JS -->
                     </ul>
@@ -208,7 +209,7 @@
                     pDenied.classList.add('hidden');
                     pAdmin.classList.remove('hidden');
                     navUser.classList.remove('hidden');
-                    
+
                     if (user.email !== SUPER_ADMIN_EMAIL) {
                         document.getElementById('seccion-gestor-admins')?.classList.add('hidden');
                     } else {
@@ -264,7 +265,7 @@
                     const emails = docSnap.data().emails;
 
                     if (emails.length === 0) {
-                        adminList.innerHTML = '<li class="text-sm text-gray-500 italic">No hay administradores registrados.</li>';
+                        adminList.innerHTML = '<li class="text-sm text-gray-500 italic">No hay personas del centro de estudiantes registradas.</li>';
                         return;
                     }
 
@@ -280,7 +281,12 @@
                             '<div class="w-8"></div>' :
                             `<button onclick="window.removerAdmin('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
 
-                        const nombre = (docSnap.data().nombres && docSnap.data().nombres[email]) ? docSnap.data().nombres[email] : 'Sin nombre registrado';
+                        let nombre = 'Sin nombre registrado';
+                        if (docSnap.data().nombres && docSnap.data().nombres[email]) {
+                            nombre = docSnap.data().nombres[email];
+                        } else if (docSnap.data()[`nombres.${email}`]) {
+                            nombre = docSnap.data()[`nombres.${email}`];
+                        }
 
                         li.innerHTML = `
                             <div class="flex items-center text-sm font-semibold text-gray-800">
@@ -318,9 +324,9 @@
 
                 try {
                     const docRef = doc(db, "config", "admins");
-                    await setDoc(docRef, { 
+                    await setDoc(docRef, {
                         emails: arrayUnion(email),
-                        [`nombres.${email}`]: nombre 
+                        [`nombres.${email}`]: nombre
                     }, { merge: true });
                     inputEmail.value = '';
                     inputName.value = '';
@@ -370,7 +376,12 @@
                         // Botón de eliminar
                         const btnDelete = `<button onclick="window.removerDelegado('${email}')" class="text-red-400 hover:text-red-600 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center"><i class="fa-solid fa-trash-can"></i></button>`;
 
-                        const nombre = (docSnap.data().nombres && docSnap.data().nombres[email]) ? docSnap.data().nombres[email] : 'Sin nombre registrado';
+                        let nombre = 'Sin nombre registrado';
+                        if (docSnap.data().nombres && docSnap.data().nombres[email]) {
+                            nombre = docSnap.data().nombres[email];
+                        } else if (docSnap.data()[`nombres.${email}`]) {
+                            nombre = docSnap.data()[`nombres.${email}`];
+                        }
 
                         li.innerHTML = `
                             <div class="flex items-center text-sm font-semibold text-gray-800">
@@ -408,7 +419,7 @@
 
                 try {
                     const docRef = doc(db, "config", "delegados");
-                    await setDoc(docRef, { 
+                    await setDoc(docRef, {
                         emails: arrayUnion(email),
                         [`nombres.${email}`]: nombre
                     }, { merge: true });
