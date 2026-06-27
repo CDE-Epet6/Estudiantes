@@ -65,9 +65,12 @@
         <div id="panel-agenda" class="hidden w-full space-y-8">
             <div class="flex justify-between items-center border-b-2 border-gray-200 dark:border-gray-700 pb-4">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">Agenda Oficial</h2>
-                <button id="btn-nuevo-evento" onclick="abrirCreador()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow transition-colors flex items-center btn-premium">
-                    <i class="fa-solid fa-plus-circle mr-2"></i> Nuevo
-                </button>
+                <div class="flex items-center gap-4">
+                    <div id="user-menu"></div>
+                    <button id="btn-nuevo-evento" onclick="abrirCreador()" class="hidden bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl shadow transition-colors flex items-center btn-premium">
+                        <i class="fa-solid fa-plus-circle mr-2"></i> Nuevo
+                    </button>
+                </div>
             </div>
 
             <div id="delegados-content" class="space-y-8">
