@@ -656,48 +656,72 @@
             if (!evento) return;
 
             const content = document.createElement('div');
-            content.style.padding = '40px';
-            content.style.fontFamily = 'Arial, sans-serif';
-            content.style.color = '#333';
+            content.style.padding = '10px';
+            content.style.fontFamily = "'Inter', 'Segoe UI', Arial, sans-serif";
+            content.style.color = '#1f2937';
             content.innerHTML = `
-                <div style="text-align: center; border-bottom: 2px solid #1d4ed8; padding-bottom: 20px; margin-bottom: 30px;">
-                    <h1 style="color: #1d4ed8; margin: 0; font-size: 24px;">CENTRO DE ESTUDIANTES EPET N°6</h1>
-                    <h2 style="color: #666; margin: 5px 0 0 0; font-size: 16px;">Acta Oficial de Reunión</h2>
+                <!-- HEADER -->
+                <div style="display: flex; align-items: center; border-bottom: 3px solid #1d4ed8; padding-bottom: 20px; margin-bottom: 30px;">
+                    <div style="width: 70px; height: 70px; background-color: #1d4ed8; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 24px; margin-right: 20px; letter-spacing: 2px;">
+                        CDE
+                    </div>
+                    <div>
+                        <h1 style="color: #1d4ed8; margin: 0; font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">CENTRO DE ESTUDIANTES</h1>
+                        <h2 style="color: #4b5563; margin: 5px 0 0 0; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">EPET N°6 - Acta Oficial de Reunión</h2>
+                    </div>
                 </div>
                 
-                <h3 style="font-size: 20px; margin-bottom: 10px; color: #111;">${evento.Titulo}</h3>
+                <!-- TÍTULO DEL EVENTO -->
+                <h3 style="font-size: 22px; margin-bottom: 25px; color: #111827; font-weight: 700; border-left: 5px solid #1d4ed8; padding-left: 15px;">${evento.Titulo}</h3>
                 
-                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
-                    <p style="margin: 5px 0;"><strong>Fecha:</strong> ${evento.Dia} de ${evento.Mes}</p>
-                    <p style="margin: 5px 0;"><strong>Hora:</strong> ${evento.Hora} hs</p>
-                    <p style="margin: 5px 0;"><strong>Lugar:</strong> ${evento.Lugar}</p>
+                <!-- METADATA (Grid) -->
+                <div style="display: flex; background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 35px; border: 1px solid #e2e8f0;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Fecha</p>
+                        <p style="margin: 0; font-size: 16px; color: #0f172a; font-weight: 600;">${evento.Dia} de ${evento.Mes}</p>
+                    </div>
+                    <div style="flex: 1; border-left: 1px solid #cbd5e1; padding-left: 20px;">
+                        <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Hora</p>
+                        <p style="margin: 0; font-size: 16px; color: #0f172a; font-weight: 600;">${evento.Hora} hs</p>
+                    </div>
+                    <div style="flex: 2; border-left: 1px solid #cbd5e1; padding-left: 20px;">
+                        <p style="margin: 0 0 8px 0; font-size: 12px; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Lugar de Encuentro</p>
+                        <p style="margin: 0; font-size: 16px; color: #0f172a; font-weight: 600;">${evento.Lugar}</p>
+                    </div>
                 </div>
 
-                ${evento.Asistentes ? `<div style="margin-bottom: 25px;">
-                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Asistentes</h4>
-                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${evento.Asistentes}</p>
+                ${evento.Asistentes ? `<div style="margin-bottom: 30px;">
+                    <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 18px; margin-bottom: 15px; font-weight: 700;">1. Registro de Asistentes</h4>
+                    <p style="white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #334155; background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 0;">${evento.Asistentes}</p>
                 </div>` : ''}
 
-                <div style="margin-bottom: 25px;">
-                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Temario Inicial</h4>
-                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${evento.Temario}</p>
+                <div style="margin-bottom: 30px;">
+                    <h4 style="color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 18px; margin-bottom: 15px; font-weight: 700;">2. Temario Inicial</h4>
+                    <p style="white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #334155; margin: 0;">${evento.Temario}</p>
                 </div>
 
-                <div style="margin-bottom: 40px;">
-                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Acta / Resumen</h4>
-                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">${evento.Acta}</p>
+                <div style="margin-bottom: 50px;">
+                    <h4 style="color: #1d4ed8; border-bottom: 2px solid #bfdbfe; padding-bottom: 8px; font-size: 18px; margin-bottom: 15px; font-weight: 700;">3. Desarrollo y Conclusiones (Acta)</h4>
+                    <p style="white-space: pre-wrap; font-size: 15px; line-height: 1.7; color: #1e293b; margin: 0;">${evento.Acta}</p>
                 </div>
 
-                <div style="margin-top: 60px; text-align: center;">
-                    <div style="display: inline-block; width: 250px; border-top: 1px solid #333; padding-top: 10px;">
-                        <p style="margin: 0; font-weight: bold;">Firma Secretario/a</p>
-                        <p style="margin: 0; font-size: 12px; color: #666;">Centro de Estudiantes EPET 6</p>
+                <!-- FIRMAS -->
+                <div style="margin-top: 80px; display: flex; justify-content: space-around; page-break-inside: avoid;">
+                    <div style="text-align: center;">
+                        <div style="width: 200px; border-top: 1px solid #1e293b; padding-top: 10px; margin: 0 auto;"></div>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; font-size: 14px; color: #0f172a;">Firma Secretario/a</p>
+                        <p style="margin: 0; font-size: 12px; color: #64748b;">Mesa CDE - EPET 6</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="width: 200px; border-top: 1px solid #1e293b; padding-top: 10px; margin: 0 auto;"></div>
+                        <p style="margin: 5px 0 0 0; font-weight: bold; font-size: 14px; color: #0f172a;">Firma Presidente/a</p>
+                        <p style="margin: 0; font-size: 12px; color: #64748b;">Mesa CDE - EPET 6</p>
                     </div>
                 </div>
             `;
 
             const opt = {
-                margin:       1,
+                margin:       0.6,
                 filename:     `Acta_${evento.Titulo.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
