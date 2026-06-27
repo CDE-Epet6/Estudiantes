@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votar Ideas | Centro de Estudiantes EPET 6</title>
+    <meta name="description" content="Vota las ideas de tus compañeros en el Centro de Estudiantes de la EPET 6.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Estilos de Animación Estáticos -->
+    <link rel="stylesheet" href="animations.css">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="components.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-lista-azul {
+            background-color: #1e3a8a;
+        }
+
+        .text-lista-azul {
+            color: #1e3a8a;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 selection:bg-blue-200">
+
+    <div id="header-container"></div>
+
+    <!-- Header Section -->
+    <section
+        class="animated-gradient text-white pt-32 pb-16 px-4 relative overflow-hidden mt-10 md:mt-0">
+        <!-- Orbes Flotantes -->
+        <div class="floating-orb bg-blue-300 w-96 h-96 -top-20 -left-20"></div>
+        <div class="floating-orb bg-indigo-300 w-80 h-80 -bottom-20 -right-20" style="animation-delay: -3s; animation-duration: 24s;"></div>
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-md text-glow">Votación de Ideas Estudiantiles</h2>
+            <p class="text-lg text-blue-100 max-w-2xl mx-auto font-light">
+                Lee las ideas que dejaron tus compañeros y votá las que consideres que deben ser prioridad en nuestra gestión.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 py-12">
+
+        <!-- Bloque de Autenticación Requerida -->
+        <div id="login-required"
+            class="hidden bg-white p-8 rounded-2xl shadow-md border border-gray-200 text-center max-w-2xl mx-auto mb-12">
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-brands fa-google text-2xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Iniciá sesión para votar</h3>
+            <p class="text-gray-500 mb-6">Para garantizar que las votaciones sean justas y transparentes, requerimos que
+                inicies sesión con tu cuenta de Google. <br><strong>Solo podés votar una vez por propuesta.</strong></p>
+            <button id="btn-login-main"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-md transform hover:-translate-y-0.5 flex items-center justify-center gap-3 mx-auto">
+                <i class="fa-brands fa-google"></i> Continuar con Google
+            </button>
+        </div>
+
+        <!-- Skeleton Loader (Estado Inicial) -->
+        <div id="loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col relative animate-pulse">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div class="h-12 bg-gray-200 rounded-xl w-full"></div>
+                </div>
+            </div>
+            <div
+                class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col relative animate-pulse hidden md:flex">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div class="h-12 bg-gray-200 rounded-xl w-full"></div>
+                </div>
+            </div>
+            <div
+                class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col relative animate-pulse hidden lg:flex">
+                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                    <div class="h-12 bg-gray-200 rounded-xl w-full"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-msg" class="hidden text-center py-20 bg-red-50 rounded-2xl border border-red-200">
+            <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-4"></i>
+            <p class="text-red-700 font-medium" id="error-text">No se pudo conectar a la base de datos.</p>
+        </div>
+
+        <!-- Dropdown de Ordenamiento -->
+        <div id="sort-container" class="hidden mb-6 flex justify-end">
+            <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-lg shadow-sm border border-gray-200">
+                <i class="fa-solid fa-arrow-down-wide-short text-gray-400"></i>
+                <select id="sort-select"
+                    class="bg-transparent text-sm font-semibold text-gray-700 outline-none cursor-pointer">
+                    <option value="mas_votados">Más votados</option>
+                    <option value="menos_votados">Menos votados</option>
+                    <option value="mas_nuevos">Más recientes</option>
+                    <option value="mas_viejos">Más antiguos</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="empty-state"
+            class="hidden text-center py-20 bg-blue-50 rounded-2xl border-2 border-dashed border-blue-200">
+            <i class="fa-regular fa-folder-open text-4xl text-blue-400 mb-4"></i>
+            <p class="text-blue-800 font-medium text-lg">Aún no hay propuestas para votar.</p>
+            <p class="text-sm text-blue-600 mt-2">El centro de estudiantes subirá las mejores ideas pronto.</p>
+        </div>
+
+        <!-- Propuestas Grid -->
+        <div id="propuestas-container"
+            class="grid grid-cols-1 md:grid-cols-2 gap-8 hidden opacity-50 pointer-events-none transition-opacity duration-300">
+            <!-- Las tarjetas se inyectan acá desde JS -->
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Firebase SDK (Módulos ES6) -->
+    <!-- Firebase SDK (Módulos ES6) -->
+    <script type="module">
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, getDocs, doc, getDoc, updateDoc, increment, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { auth, db } from "./firebase-config.js";
+
+        // --- MODO ADMINISTRADOR ---
+        let ADMIN_EMAILS = [];
+
+        // Variables de la UI
+        const loading = document.getElementById('loading');
+        const errorMsg = document.getElementById('error-msg');
+        const errorText = document.getElementById('error-text');
+        const sortSelect = document.getElementById('sort-select');
+        const sortContainer = document.getElementById('sort-container');
+        const emptyState = document.getElementById('empty-state');
+
+        let sugerenciasGlobales = [];
+        const container = document.getElementById('propuestas-container');
+        const loginRequiredBlock = document.getElementById('login-required');
+        const btnLoginMain = document.getElementById('btn-login-main');
+
+        let currentUser = null;
+        let isAdmin = false;
+
+        // Escuchar estado de autenticación (la lógica del menú delegados/admin la maneja auth.js)
+        // Aquí solo manejamos lo específico de la votación
+        onAuthStateChanged(auth, async (user) => {
+            if (user && user.isAnonymous) {
+                signOut(auth);
+                return;
+            }
+
+            currentUser = user;
+
+            if (user) {
+                try {
+                    const adminDoc = await getDoc(doc(db, "config", "admins"));
+                    if (adminDoc.exists()) {
+                        ADMIN_EMAILS = adminDoc.data().emails || [];
+                    }
+                } catch (e) {
+                    console.log("No se pudieron cargar las personas del centro de estudiantes", e);
+                }
+
+                isAdmin = user.email ? ADMIN_EMAILS.includes(user.email) : false;
+
+                loginRequiredBlock.classList.add('hidden');
+                container.classList.remove('opacity-50', 'pointer-events-none');
+
+                cargarPropuestas();
+            } else {
+                loginRequiredBlock.classList.remove('hidden');
+                container.classList.add('opacity-50', 'pointer-events-none');
+
+                cargarPropuestas();
+            }
+        });
+
+        btnLoginMain.addEventListener('click', window.loginWithGoogle);
+
+        // Función para cargar los datos de Firestore
+        async function cargarPropuestas() {
+            loading.classList.add('hidden'); // Hide simple loading text
+            errorMsg.classList.add('hidden');
+            emptyState.classList.add('hidden');
+
+            // Render Skeleton Loaders
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            for (let i = 0; i < 3; i++) {
+                container.innerHTML += `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col relative animate-pulse">
+                    <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-5/6 mb-6"></div>
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <div class="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+                        <div class="h-12 bg-gray-200 rounded-xl w-full"></div>
+                    </div>
+                </div>`;
+            }
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "propuestas"));
+                sugerenciasGlobales = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                if (sugerenciasGlobales.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    sortContainer.classList.add('hidden');
+                } else {
+                    sortContainer.classList.remove('hidden');
+                    ordenarSugerencias(sortSelect.value);
+                }
+            } catch (error) {
+                console.error("Error leyendo Firestore:", error);
+                loading.classList.add('hidden');
+                errorMsg.classList.remove('hidden');
+                errorText.innerText = "Error al leer las propuestas. Revisá los permisos de Firestore.";
+            }
+        }
+
+        function ordenarSugerencias(metodo) {
+            if (metodo === 'mas_votados') {
+                sugerenciasGlobales.sort((a, b) => (b.votos || 0) - (a.votos || 0));
+            } else if (metodo === 'menos_votados') {
+                sugerenciasGlobales.sort((a, b) => (a.votos || 0) - (b.votos || 0));
+            } else if (metodo === 'mas_nuevos') {
+                sugerenciasGlobales.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            } else if (metodo === 'mas_viejos') {
+                sugerenciasGlobales.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            }
+            renderizarTarjetas();
+        }
+
+        sortSelect.addEventListener('change', (e) => {
+            ordenarSugerencias(e.target.value);
+        });
+
+        function renderizarTarjetas() {
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            sugerenciasGlobales.forEach(prop => {
+                const yaVoto = currentUser ? (prop.votedBy || []).includes(currentUser.uid) : false;
+                crearTarjeta(prop.id, prop.titulo, prop.descripcion, prop.votos || 0, yaVoto);
+            });
+        }
+
+        // Función para inyectar HTML de la tarjeta
+        function crearTarjeta(id, titulo, descripcion, votos, yaVoto) {
+            const card = document.createElement('div');
+            card.id = `card-${id}`;
+            card.className = "bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col relative bento-card fade-in-up";
+
+            const adminButton = isAdmin ?
+                `<button id="del-${id}" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition-colors" title="Eliminar Propuesta">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>` : '';
+
+            card.innerHTML = `
+                ${adminButton}
+                <div class="flex-grow pr-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">${titulo}</h3>
+                    <p class="text-gray-600 mb-6 text-sm leading-relaxed">${descripcion}</p>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-sm font-semibold text-gray-500">Votos totales: <span id="count-${id}" class="text-blue-600">${votos}</span></span>
+                    </div>
+                    <button id="btn-${id}" 
+                        class="btn-votar w-full font-bold py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 
+                        ${yaVoto ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md transform hover:-translate-y-1 active:scale-95 btn-premium'}">
+                        <i class="fa-solid ${yaVoto ? 'fa-check' : 'fa-thumbs-up'}"></i> ${yaVoto ? 'Ya Votaste' : 'Votar Idea'}
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(card);
+
+            // Agregar evento de click al botón votar si no votó y si está logueado
+            const btn = document.getElementById(`btn-${id}`);
+            if (!yaVoto && currentUser) {
+                btn.addEventListener('click', () => votar(id, btn));
+            }
+
+            // Agregar evento de eliminar si es admin
+            if (isAdmin) {
+                document.getElementById(`del-${id}`).addEventListener('click', () => eliminarPropuesta(id, titulo, descripcion));
+            }
+        }
+
+        // Función de administrador para borrar propuesta y loguear en Discord
+        async function eliminarPropuesta(id, titulo, descripcion) {
+            if (!confirm("⚠️ ¿Estás seguro que querés ELIMINAR definitivamente esta propuesta?")) return;
+
+            try {
+                // Enviar log a Discord antes de borrar
+                const payloadDiscord = {
+                    content: null,
+                    embeds: [{
+                        title: "🗑️ Sugerencia Eliminada",
+                        color: 15158332, // Rojo
+                        fields: [
+                            { name: "👮 Eliminado por", value: currentUser.email || "Administrador", inline: true },
+                            { name: "👤 Autor original", value: titulo, inline: true },
+                            { name: "📝 Contenido", value: descripcion }
+                        ],
+                        footer: { text: "Log de Moderación - EPET 6" },
+                        timestamp: new Date().toISOString()
+                    }]
+                };
+
+                // Webhook proporcionado para el log
+                await fetch("https://discord.com/api/webhooks/1514817644639817738/DvjG9Dxgcg2WJeZZbChxftm6Sn6t-j2tjfqTtXKgSB45XI-uRcFuk1Qzj1CQbtXqW_ms", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadDiscord)
+                }).catch(err => console.error("Error enviando log a Discord:", err));
+
+                const docRef = doc(db, "propuestas", id);
+                await deleteDoc(docRef);
+
+                // Remover del DOM visualmente al instante
+                const card = document.getElementById(`card-${id}`);
+                if (card) card.remove();
+
+                // Si ya no quedan tarjetas visibles, mostramos mensaje vacío
+                if (container.children.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    sortContainer.classList.add('hidden');
+                }
+
+                window.Toast.fire({
+                    icon: 'success',
+                    title: 'Propuesta eliminada correctamente.'
+                });
+            } catch (error) {
+                console.error("Error al eliminar:", error);
+                window.Toast.fire({
+                    icon: 'error',
+                    title: 'Hubo un error al eliminar. Verificá tu conexión.'
+                });
+            }
+        }
+
+        // Función para registrar el voto de manera segura en Firestore
+        async function votar(id, btnElement) {
+            if (!currentUser) return;
+
+            // Deshabilitar botón inmediatamente visualmente
+            btnElement.disabled = true;
+            btnElement.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registrando...';
+            btnElement.classList.replace('bg-blue-600', 'bg-blue-400');
+            btnElement.classList.replace('hover:bg-blue-700', 'bg-blue-400');
+            btnElement.classList.remove('transform', 'hover:-translate-y-0.5');
+
+            try {
+                // Actualizar documento: incrementa votos y agrega UID al array
+                const docRef = doc(db, "propuestas", id);
+                await updateDoc(docRef, {
+                    votos: increment(1),
+                    votedBy: arrayUnion(currentUser.uid)
+                });
+
+                // Actualizar UI
+                const countSpan = document.getElementById(`count-${id}`);
+                countSpan.innerText = parseInt(countSpan.innerText) + 1;
+
+                // Animación de rebote (Heartbeat style)
+                countSpan.classList.add('animate-ping');
+                setTimeout(() => countSpan.classList.remove('animate-ping'), 300);
+
+                btnElement.innerHTML = '<i class="fa-solid fa-check"></i> Ya Votaste';
+                btnElement.className = "w-full font-bold py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 bg-gray-100 text-gray-400 cursor-not-allowed mt-4";
+
+                window.Toast.fire({
+                    icon: 'success',
+                    title: '¡Voto registrado con éxito!'
+                });
+
+            } catch (error) {
+                console.error("Error al votar:", error);
+                window.Toast.fire({
+                    icon: 'error',
+                    title: 'Hubo un problema al registrar el voto. ¿Estás seguro que no votaste antes?'
+                });
+
+                // Restaurar botón
+                btnElement.disabled = false;
+                btnElement.innerHTML = '<i class="fa-solid fa-thumbs-up"></i> Votar Propuesta';
+                btnElement.classList.replace('bg-blue-400', 'bg-blue-600');
+                btnElement.classList.replace('hover:bg-blue-400', 'hover:bg-blue-700');
+                btnElement.classList.add('transform', 'hover:-translate-y-1', 'active:scale-95');
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestras Propuestas | Lista Azul EPET 6</title>
+    <meta name="description" content="Conocé las propuestas y proyectos de la Lista Azul para mejorar la EPET 6.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Estilos de Animación Estáticos -->
+    <link rel="stylesheet" href="animations.css">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="components.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bg-lista-azul {
+            background-color: #1e3a8a;
+        }
+
+        .text-lista-azul {
+            color: #1e3a8a;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 selection:bg-blue-200">
+
+    <div id="header-container"></div>
+
+    <!-- Header Section -->
+    <section class="animated-gradient text-white pt-24 pb-16 px-4 relative overflow-hidden">
+        <!-- Orbes Flotantes -->
+        <div class="floating-orb bg-blue-300 w-96 h-96 -top-20 -left-20"></div>
+        <div class="floating-orb bg-indigo-300 w-80 h-80 -bottom-20 -right-20" style="animation-delay: -7s; animation-duration: 22s;"></div>
+        <div class="absolute inset-0 bg-black opacity-10"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10 fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-extrabold mb-4 drop-shadow-md text-glow">Proyectos y Propuestas</h2>
+            <p class="text-lg text-blue-100 max-w-2xl mx-auto font-light">
+                Conocé los proyectos oficiales del Centro de Estudiantes para potenciar la EPET N°6.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Propuesta 1 -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 bento-card fade-in-up"
+                style="animation-delay: 0.1s;">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                    <i class="fa-solid fa-dumbbell text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Gimnasio y Comedor</h3>
+                <p class="text-gray-600 leading-relaxed">Impulsaremos la construcción y acondicionamiento de un gimnasio
+                    y comedor para todos los estudiantes.</p>
+            </div>
+
+            <!-- Propuesta 2 -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 bento-card fade-in-up"
+                style="animation-delay: 0.2s;">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                    <i class="fa-solid fa-flask text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Renovación de Laboratorio</h3>
+                <p class="text-gray-600 leading-relaxed">Gestionaremos los recursos necesarios para tener un laboratorio
+                    moderno y equipado para nuestras prácticas.</p>
+            </div>
+
+            <!-- Propuesta 3 -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 bento-card fade-in-up"
+                style="animation-delay: 0.3s;">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                    <i class="fa-solid fa-guitar text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Música y Teatro</h3>
+                <p class="text-gray-600 leading-relaxed">Crearemos un aula especial destinada al desarrollo artístico,
+                    con espacios para música y teatro.</p>
+            </div>
+
+            <!-- Propuesta 4 -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 bento-card fade-in-up"
+                style="animation-delay: 0.4s;">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                    <i class="fa-solid fa-briefcase text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Pasantías (5 y 6 Año)</h3>
+                <p class="text-gray-600 leading-relaxed">Trabajaremos para conseguir mejor calidad y mayor cantidad de
+                    pasantías para los estudiantes de los últimos años.</p>
+            </div>
+
+            <!-- Propuesta 5 -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-100 p-8 bento-card fade-in-up md:col-span-2 lg:col-span-1"
+                style="animation-delay: 0.5s;">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                    <i class="fa-solid fa-users-gear text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Problemáticas Generales</h3>
+                <p class="text-gray-600 leading-relaxed">Seremos tu voz activa frente a los directivos para resolver las
+                    problemáticas del día a día en la escuela en general.</p>
+            </div>
+
+        </div>
+
+        <div class="mt-16 text-center fade-in-up" style="animation-delay: 0.6s;">
+            <p class="text-gray-600 mb-6">¿Tenés una idea distinta o algo que mejorar?</p>
+            <a href="buzon.html"
+                class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:-translate-y-1">
+                Dejanos tu Sugerencia
+            </a>
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Script Auth inyectado por JS -->
+</body>
+
+</html>

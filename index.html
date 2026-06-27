@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Estudiantes | EPET 6</title>
+    <meta name="description"
+        content="Portal del Centro de Estudiantes de la EPET 6 (Lista Azul). Votaciones, propuestas y buzón de sugerencias.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Estilos de Animación Estáticos -->
+    <link rel="stylesheet" href="animations.css">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="components.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .slide-up {
+            opacity: 0;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bg-lista-azul {
+            background-color: #1d4ed8;
+        }
+
+        .text-lista-azul {
+            color: #1d4ed8;
+        }
+
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <div id="header-container"></div>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow w-full">
+
+        <!-- Hero Section -->
+        <section class="animated-gradient text-white py-20 px-4 relative overflow-hidden">
+            <!-- Orbes Flotantes -->
+            <div class="floating-orb bg-blue-300 w-96 h-96 -top-20 -left-20"></div>
+            <div class="floating-orb bg-indigo-300 w-80 h-80 -bottom-20 -right-20"
+                style="animation-delay: -5s; animation-duration: 25s;"></div>
+            <div class="absolute inset-0 bg-black opacity-10"></div>
+            <div class="max-w-4xl mx-auto text-center relative z-10 fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold mb-6 leading-tight">Construimos juntos la escuela que
+                    queremos</h2>
+                <p class="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto font-light">
+                    El Centro de Estudiantes es tu espacio de participación activa. Proponé ideas, participá de las
+                    decisiones y formá parte del cambio en la EPET N°6.
+                </p>
+                <div class="mt-8 flex flex-wrap justify-center gap-4">
+                    <a href="buzon.html"
+                        class="inline-block bg-white text-blue-700 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 hover:shadow-xl transition-all transform hover:-translate-y-1 btn-premium">
+                        Dejar una Idea
+                    </a>
+                    <a href="votacion.html"
+                        class="inline-block bg-blue-700 bg-opacity-40 border border-blue-400 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-blue-600 transition-all transform hover:-translate-y-1 btn-premium">
+                        Votar Ideas
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tarjetas de Navegación Rápida -->
+        <section class="max-w-7xl mx-auto px-4 py-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tarjeta Propuestas -->
+                <a href="propuestas.html" data-aos="fade-up" data-aos-delay="100"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm bento-card border border-gray-100">
+                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                        <i class="fa-solid fa-bullhorn text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Nuestras Propuestas</h3>
+                    <p class="text-gray-600 font-medium">Conocé nuestras ideas para mejorar el colegio, desde los
+                        baños hasta los eventos.</p>
+                </a>
+
+                <!-- Tarjeta Buzón -->
+                <a href="buzon.html" data-aos="fade-up" data-aos-delay="200"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm bento-card border border-gray-100 relative overflow-hidden">
+                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                        <i class="fa-solid fa-envelope-open-text text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Buzón de Sugerencias</h3>
+                    <p class="text-gray-600 font-medium">¿Tenés una idea o reclamo? Dejala acá para que todos puedan
+                        votarla y apoyarla.</p>
+                </a>
+
+                <!-- Tarjeta Votaciones -->
+                <a href="votacion.html" data-aos="fade-up" data-aos-delay="300"
+                    class="group block bg-white rounded-3xl p-8 shadow-sm bento-card border border-gray-100 md:col-span-2 lg:col-span-1">
+                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 icon-container">
+                        <i class="fa-solid fa-check-to-slot text-3xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Votar Ideas</h3>
+                    <p class="text-gray-600 font-medium">Entrá a ver qué proponen tus compañeros y votá las ideas
+                        que más te representen.</p>
+                </a>
+            </div>
+        </section>
+
+        <div class="max-w-5xl mx-auto px-4 py-16 space-y-24">
+
+            <!-- Banner de Victoria y Festejo -->
+            <section
+                class="slide-up delay-100 bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 text-white p-8 md:p-12 rounded-3xl shadow-2xl border border-blue-500 text-center relative overflow-hidden"
+                data-aos="fade-up">
+                <!-- Orbes de fondo decorativos -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-white opacity-10 rounded-full blur-2xl"></div>
+
+                <div class="relative z-10 max-w-2xl mx-auto">
+                    <span
+                        class="inline-block py-1.5 px-4 rounded-full bg-yellow-500 text-gray-900 text-xs font-black uppercase tracking-wider mb-4 shadow-md animate-bounce">
+                        ¡Ganamos!
+                    </span>
+                    <h3 class="text-3xl md:text-5xl font-black mb-4 tracking-tight drop-shadow-md text-glow">¡GRACIAS
+                        EPET N°6!</h3>
+                    <p class="text-blue-100 mb-8 text-lg font-light leading-relaxed">
+                        Con el apoyo y la confianza de todos ustedes, la <strong>Lista Azul</strong> es oficialmente el
+                        nuevo <strong>Centro de Estudiantes</strong> de la técnica. Hoy empieza el verdadero compromiso
+                        para construir la escuela que queremos.
+                    </p>
+
+                    <!-- Tarjetas de compromisos en marcha (Bento interno) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 text-left">
+                        <div
+                            class="bg-white bg-opacity-10 backdrop-blur-md p-4 rounded-2xl border border-white border-opacity-10 hover:border-opacity-30 transition-all duration-300">
+                            <i class="fa-solid fa-envelope-open text-yellow-300 text-xl mb-2"></i>
+                            <h4 class="font-bold text-sm text-white mb-1">Buzón Activo</h4>
+                            <p class="text-xs text-blue-100">Ya estamos revisando sus ideas para priorizar las primeras
+                                medidas.</p>
+                        </div>
+                        <div
+                            class="bg-white bg-opacity-10 backdrop-blur-md p-4 rounded-2xl border border-white border-opacity-10 hover:border-opacity-30 transition-all duration-300">
+                            <i class="fa-solid fa-users text-yellow-300 text-xl mb-2"></i>
+                            <h4 class="font-bold text-sm text-white mb-1">Delegados</h4>
+                            <p class="text-xs text-blue-100">Convocaremos pronto a la primera reunión de delegados.</p>
+                        </div>
+                        <div
+                            class="bg-white bg-opacity-10 backdrop-blur-md p-4 rounded-2xl border border-white border-opacity-10 hover:border-opacity-30 transition-all duration-300">
+                            <i class="fa-solid fa-handshake text-yellow-300 text-xl mb-2"></i>
+                            <h4 class="font-bold text-sm text-white mb-1">Transparencia</h4>
+                            <p class="text-xs text-blue-100">Toda la gestión del Centro será pública y transparente para
+                                todos.</p>
+                        </div>
+                    </div>
+
+                    <button id="btn-confetti"
+                        class="inline-block bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-extrabold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 btn-premium active:scale-95 text-base">
+                        Festejar con Confeti
+                    </button>
+                </div>
+            </section>
+
+            <!-- Quiénes Somos y El Equipo -->
+            <section
+                class="slide-up delay-100 bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 text-center"
+                data-aos="fade-up">
+                <div class="max-w-4xl mx-auto space-y-12">
+                    <!-- Introducción -->
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 inline-block border-b-4 border-blue-600 pb-2 mb-6">
+                            Quiénes Somos</h3>
+                        <p class="text-lg text-gray-600 leading-relaxed mb-4">
+                            Somos tu <strong>Centro de Estudiantes (Lista Azul)</strong>, un equipo conformado por
+                            alumnos de distintos años.
+                            Nuestro objetivo principal es representar tu voz de forma activa ante los directivos,
+                            defender tus derechos y mejorar el día a día en la técnica.
+                        </p>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            Creemos en la transparencia, el compañerismo y el trabajo constante para tener la escuela
+                            que merecemos.
+                        </p>
+                    </div>
+
+                    <!-- Equipo Principal -->
+                    <div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-8">El Equipo</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-crown text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Tiago Boscarol</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Presidente</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-handshake-angle text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Atila Lanfquen</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Vicepresidente</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-sack-dollar text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Tiziano Funes</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Tesorero</p>
+                            </div>
+                            <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                <i class="fa-solid fa-file-signature text-blue-600 text-3xl mb-3"></i>
+                                <h5 class="font-bold text-gray-900">Rodrigo Araya</h5>
+                                <p class="text-sm text-blue-600 font-semibold uppercase mt-1">Secretario</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vocales -->
+                    <div class="bg-gray-50 p-8 rounded-2xl border border-gray-100">
+                        <h4 class="text-xl font-bold text-gray-800 mb-6"><i
+                                class="fa-solid fa-users text-blue-500 mr-2"></i> Vocales</h4>
+                        <div class="flex flex-wrap justify-center gap-4">
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agostina
+                                Garcia</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Franco
+                                Panizza</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Matias
+                                Segura</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Agustin
+                                Traipe</span>
+                            <span
+                                class="bg-white px-4 py-2 rounded-full text-gray-700 font-medium shadow-sm border border-gray-200">Leonel
+                                Cordoba</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div id="footer-container"></div>
+
+    <!-- Lógica de Festejos y Confeti -->
+    <script>
+        // Función para lanzar una ráfaga de confeti con los colores celeste, azul y blanco
+        function lanzarConfeti() {
+            const colores = ['#38bdf8', '#1d4ed8', '#ffffff', '#60a5fa'];
+
+            // Disparar desde la izquierda
+            confetti({
+                particleCount: 80,
+                angle: 60,
+                spread: 70,
+                origin: { x: 0, y: 0.8 },
+                colors: colores
+            });
+
+            // Disparar desde la derecha
+            confetti({
+                particleCount: 80,
+                angle: 120,
+                spread: 70,
+                origin: { x: 1, y: 0.8 },
+                colors: colores
+            });
+        }
+
+        // Ejecutar confeti al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Un pequeño delay para que la página cargue visualmente primero
+            setTimeout(lanzarConfeti, 500);
+
+            // También lanzamos un efecto de fuegos artificiales sutil
+            setTimeout(() => {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { x: 0.5, y: 0.4 },
+                    colors: ['#38bdf8', '#1d4ed8', '#ffffff']
+                });
+            }, 1200);
+
+            // Escuchar botón de festejar
+            const btnConfetti = document.getElementById('btn-confetti');
+            if (btnConfetti) {
+                btnConfetti.addEventListener('click', () => {
+                    lanzarConfeti();
+                    // Lanzar ráfaga extra en el centro
+                    confetti({
+                        particleCount: 40,
+                        spread: 100,
+                        origin: { y: 0.6 },
+                        colors: ['#fbbf24', '#ffffff', '#1d4ed8']
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
