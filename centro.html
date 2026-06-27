@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal CDE | Centro de Estudiantes</title>
+    <meta name="description" content="Portal privado para la mesa de trabajo del Centro de Estudiantes.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class' };
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else { document.documentElement.classList.remove('dark'); }
+    </script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Estilos de Animación Estáticos -->
+    <link rel="stylesheet" href="animations.css">
+    <!-- Componentes Compartidos -->
+    <script type="module" src="components.js"></script>
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex flex-col min-h-screen transition-colors duration-300">
+    <!-- Header dinámico -->
+    <div id="header-container"></div>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8 relative">
+        <div id="auth-guard" class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm text-center border border-gray-100 dark:border-gray-700 slide-up">
+            <i class="fa-solid fa-lock text-5xl text-blue-300 dark:text-blue-700 mb-4"></i>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Portal Privado</h2>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Iniciando verificación...</p>
+        </div>
+
+        <div id="portal-content" class="hidden space-y-8 slide-up">
+            <!-- Título -->
+            <div class="bg-gradient-to-r from-green-600 to-green-500 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -translate-y-1/2 translate-x-1/4 blur-2xl"></div>
+                <h1 class="text-3xl md:text-4xl font-black mb-2 relative z-10"><i class="fa-solid fa-briefcase mr-3"></i>Mesa de Trabajo CDE</h1>
+                <p class="text-green-100 text-lg relative z-10">Espacio privado de gestión para administradores.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- TABLERO DE TAREAS -->
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[500px]">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white"><i class="fa-solid fa-list-check text-green-500 mr-2"></i>Tareas a Revisar</h3>
+                    </div>
+                    
+                    <form id="form-tarea" class="mb-4 flex gap-2">
+                        <input type="text" id="tarea-texto" required placeholder="Añadir nueva tarea o tema..." class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-green-500">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 rounded-lg text-sm font-bold shadow-sm transition-colors"><i class="fa-solid fa-plus"></i></button>
+                    </form>
+
+                    <div id="lista-tareas" class="flex-1 overflow-y-auto space-y-2 pr-2">
+                        <p class="text-center text-sm text-gray-500 py-4"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Cargando...</p>
+                    </div>
+                </div>
+
+                <!-- REPOSITORIO DE ARCHIVOS -->
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[500px]">
+                    <div class="flex justify-between items-center mb-4 border-b border-gray-100 dark:border-gray-700 pb-4">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-white"><i class="fa-solid fa-folder-open text-blue-500 mr-2"></i>Repositorio (Drive/PDF)</h3>
+                    </div>
+
+                    <form id="form-recurso" class="mb-4 space-y-2">
+                        <input type="text" id="recurso-titulo" required placeholder="Título (Ej: Acta fundacional, Formulario)" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                        <div class="flex gap-2">
+                            <input type="url" id="recurso-url" required placeholder="Enlace (Google Drive, Docs, Canvas...)" class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg p-2 text-sm bg-gray-50 dark:bg-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-lg text-sm font-bold shadow-sm transition-colors"><i class="fa-solid fa-cloud-arrow-up"></i></button>
+                        </div>
+                    </form>
+
+                    <div id="lista-recursos" class="flex-1 overflow-y-auto space-y-3 pr-2">
+                        <p class="text-center text-sm text-gray-500 py-4"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Cargando...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer dinámico -->
+    <div id="footer-container"></div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { collection, query, getDocs, addDoc, deleteDoc, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const guard = document.getElementById('auth-guard');
+        const portal = document.getElementById('portal-content');
+
+        // Check directly against DB just in case window.currentUserIsAdmin is delayed
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const configDoc = await getDoc(doc(db, "config", "admins"));
+                const isUserAdmin = configDoc.exists() && configDoc.data().emails && configDoc.data().emails.includes(user.email);
+                
+                if (isUserAdmin) {
+                    guard.classList.add('hidden');
+                    portal.classList.remove('hidden');
+                    cargarTareas();
+                    cargarRecursos();
+                    
+                    document.getElementById('nav-item-admin')?.classList.remove('hidden');
+                    document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                    document.getElementById('nav-item-centro')?.classList.remove('hidden');
+                } else {
+                    guard.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-5xl text-red-500 mb-4"></i><h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Acceso Denegado</h2><p class="text-gray-600 dark:text-gray-400">Esta página es exclusiva para la mesa de trabajo del CDE.</p>';
+                }
+            } else {
+                guard.innerHTML = '<i class="fa-solid fa-user-lock text-5xl text-gray-400 mb-4"></i><h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Iniciá Sesión</h2><p class="text-gray-600 dark:text-gray-400">Debés iniciar sesión con tu cuenta de administrador.</p>';
+            }
+        });
+
+        const listaTareas = document.getElementById('lista-tareas');
+        const formTarea = document.getElementById('form-tarea');
+
+        async function cargarTareas() {
+            try {
+                const q = query(collection(db, "tareas_centro"));
+                const qs = await getDocs(q);
+                listaTareas.innerHTML = '';
+                if(qs.empty) {
+                    listaTareas.innerHTML = '<p class="text-sm text-gray-500 italic text-center py-4">No hay tareas pendientes. ¡Excelente!</p>';
+                    return;
+                }
+                
+                let tareas = [];
+                qs.forEach(d => tareas.push({ id: d.id, ...d.data() }));
+                
+                tareas.sort((a,b) => {
+                    if (a.completada === b.completada) return b.timestamp - a.timestamp;
+                    return a.completada ? 1 : -1;
+                }).forEach(tarea => {
+                    const statusColor = tarea.completada ? 'border-gray-200 dark:border-gray-600 opacity-60' : 'border-green-200 dark:border-green-800 border-l-4 border-l-green-500';
+                    const iconColor = tarea.completada ? 'text-green-500' : 'text-gray-300 dark:text-gray-600 hover:text-green-500';
+                    const icon = tarea.completada ? 'fa-square-check' : 'fa-square';
+                    const textColor = tarea.completada ? 'line-through text-gray-400 dark:text-gray-500' : 'text-gray-800 dark:text-gray-200 font-medium';
+
+                    listaTareas.innerHTML += \`
+                        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border \${statusColor} transition-all slide-up">
+                            <button onclick="window.toggleTarea('\${tarea.id}', \${!tarea.completada})" class="\${iconColor} transition-colors" title="\${tarea.completada ? 'Desmarcar' : 'Completar'}">
+                                <i class="fa-regular \${icon} text-xl"></i>
+                            </button>
+                            <p class="flex-1 text-sm \${textColor} break-words">\${tarea.texto}</p>
+                            <button onclick="window.borrarTarea('\${tarea.id}')" class="text-gray-400 hover:text-red-500 transition-colors p-1" title="Eliminar">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                        </div>
+                    \`;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        formTarea.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const txt = document.getElementById('tarea-texto').value.trim();
+            if(!txt) return;
+            try {
+                await addDoc(collection(db, "tareas_centro"), { texto: txt, completada: false, timestamp: Date.now() });
+                formTarea.reset();
+                cargarTareas();
+            } catch (e) { alert("Error"); }
+        });
+
+        window.toggleTarea = async (id, nuevoEstado) => {
+            await updateDoc(doc(db, "tareas_centro", id), { completada: nuevoEstado });
+            cargarTareas();
+        };
+        window.borrarTarea = async (id) => {
+            if(confirm("¿Seguro que querés borrar esta tarea?")) {
+                await deleteDoc(doc(db, "tareas_centro", id));
+                cargarTareas();
+            }
+        };
+
+        const listaRecursos = document.getElementById('lista-recursos');
+        const formRecurso = document.getElementById('form-recurso');
+
+        async function cargarRecursos() {
+            try {
+                const q = query(collection(db, "recursos_centro"));
+                const qs = await getDocs(q);
+                listaRecursos.innerHTML = '';
+                if(qs.empty) {
+                    listaRecursos.innerHTML = '<p class="text-sm text-gray-500 italic text-center py-4">Aún no se subieron enlaces.</p>';
+                    return;
+                }
+                
+                let recursos = [];
+                qs.forEach(d => recursos.push({ id: d.id, ...d.data() }));
+                
+                recursos.sort((a,b) => b.timestamp - a.timestamp).forEach(rec => {
+                    listaRecursos.innerHTML += \`
+                        <div class="flex items-center gap-3 p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800 border-l-4 border-l-blue-500 slide-up">
+                            <div class="bg-white dark:bg-blue-900 text-blue-600 dark:text-blue-300 p-2.5 rounded-lg shadow-sm border border-blue-50 dark:border-blue-700">
+                                <i class="fa-solid fa-link"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h4 class="font-bold text-gray-800 dark:text-gray-100 text-sm truncate">\${rec.titulo}</h4>
+                                <a href="\${rec.url}" target="_blank" class="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-300 hover:underline truncate block">\${rec.url}</a>
+                            </div>
+                            <button onclick="window.borrarRecurso('\${rec.id}')" class="text-gray-400 hover:text-red-500 transition-colors p-2" title="Eliminar enlace">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                        </div>
+                    \`;
+                });
+            } catch (e) { console.error(e); }
+        }
+
+        formRecurso.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tit = document.getElementById('recurso-titulo').value.trim();
+            const url = document.getElementById('recurso-url').value.trim();
+            if(!tit || !url) return;
+            try {
+                await addDoc(collection(db, "recursos_centro"), { titulo: tit, url: url, timestamp: Date.now() });
+                formRecurso.reset();
+                cargarRecursos();
+            } catch (e) { alert("Error"); }
+        });
+
+        window.borrarRecurso = async (id) => {
+            if(confirm("¿Seguro que querés borrar este enlace?")) {
+                await deleteDoc(doc(db, "recursos_centro", id));
+                cargarRecursos();
+            }
+        };
+    </script>
+</body>
+</html>

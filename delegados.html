@@ -8,14 +8,17 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' };
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else { document.documentElement.classList.remove('dark'); }
     </script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- HTML2PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- Estilos de Animación Estáticos -->
     <link rel="stylesheet" href="animations.css">
     <!-- Componentes Compartidos -->
@@ -370,6 +373,11 @@
                                         <p class="text-gray-600 dark:text-gray-300 text-sm whitespace-pre-wrap font-medium">${evento.Asistentes}</p>
                                     </div>` : '';
 
+                    const btnPDF = (window.currentUserIsAdmin && evento.Acta) ? `
+                        <button onclick="window.generarPDF(${arrayIndex})" class="w-full flex justify-center items-center bg-red-50 hover:bg-red-100 text-red-700 font-semibold py-2 px-4 border border-red-200 rounded-lg shadow-sm transition-all text-sm mb-2">
+                            <i class="fa-solid fa-file-pdf mr-2 text-lg"></i> Exportar Acta a PDF
+                        </button>` : '';
+
                     const tarjeta = `
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 border-l-4 border-lista-azul slide-up flex flex-col gap-4 relative bento-card">
                             ${adminButtons}
@@ -392,7 +400,7 @@
                                 </div>
                             </div>
                             
-                            <div class="border-t border-gray-100 pt-3">
+                            <div class="border-t border-gray-100 dark:border-gray-700 pt-3">
                                 <p class="text-xs text-gray-500 font-bold mb-2 uppercase tracking-wide">Confirmar Asistencia</p>
                                 <div class="flex gap-2 mb-3">
                                     <button onclick="window.marcarAsistencia('${evento.id}', true)" class="flex-1 py-2 px-3 rounded-lg font-bold text-sm transition-colors border border-transparent btn-premium ${evento.asisten && evento.asisten.includes(currentUserEmail) ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-green-50 hover:text-green-600'}">
@@ -403,15 +411,16 @@
                                     </button>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                                    <div class="bg-blue-50 p-3 rounded-lg text-xs border border-blue-100">
-                                        <p class="font-bold text-blue-800 mb-1"><i class="fa-solid fa-users mr-1"></i> Confirmados (${evento.asisten ? evento.asisten.length : 0}):</p>
-                                        <p class="text-blue-700 leading-relaxed">${(evento.asisten && evento.asisten.length > 0) ? evento.asisten.map(e => diccionarioNombres[e] || e.split('@')[0]).join(', ') : 'Nadie ha confirmado todavía'}</p>
+                                    <div class="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg text-xs border border-blue-100 dark:border-blue-800">
+                                        <p class="font-bold text-blue-800 dark:text-blue-300 mb-1"><i class="fa-solid fa-users mr-1"></i> Confirmados (${evento.asisten ? evento.asisten.length : 0}):</p>
+                                        <p class="text-blue-700 dark:text-blue-200 leading-relaxed">${(evento.asisten && evento.asisten.length > 0) ? evento.asisten.map(e => diccionarioNombres[e] || e.split('@')[0]).join(', ') : 'Nadie ha confirmado todavía'}</p>
                                     </div>
-                                    <div class="bg-red-50 p-3 rounded-lg text-xs border border-red-100">
-                                        <p class="font-bold text-red-800 mb-1"><i class="fa-solid fa-user-xmark mr-1"></i> Ausentes (${evento.noAsisten ? evento.noAsisten.length : 0}):</p>
-                                        <p class="text-red-700 leading-relaxed">${(evento.noAsisten && evento.noAsisten.length > 0) ? evento.noAsisten.map(e => diccionarioNombres[e] || e.split('@')[0]).join(', ') : 'Nadie ha avisado que falta'}</p>
+                                    <div class="bg-red-50 dark:bg-red-900/30 p-3 rounded-lg text-xs border border-red-100 dark:border-red-800">
+                                        <p class="font-bold text-red-800 dark:text-red-300 mb-1"><i class="fa-solid fa-user-xmark mr-1"></i> Ausentes (${evento.noAsisten ? evento.noAsisten.length : 0}):</p>
+                                        <p class="text-red-700 dark:text-red-200 leading-relaxed">${(evento.noAsisten && evento.noAsisten.length > 0) ? evento.noAsisten.map(e => diccionarioNombres[e] || e.split('@')[0]).join(', ') : 'Nadie ha avisado que falta'}</p>
                                     </div>
                                 </div>
+                                ${btnPDF}
                                 <button onclick="window.descargarICS(${arrayIndex})" class="w-full flex justify-center items-center bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 border border-gray-200 rounded-lg shadow-sm transition-all text-sm btn-premium">
                                     <i class="fa-regular fa-calendar-plus text-lista-azul mr-2 text-lg"></i> Agendar Recordatorio
                                 </button>
@@ -638,6 +647,67 @@
             a.click();
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
+        };
+        // ==========================================
+        // GENERAR PDF DE ACTA
+        // ==========================================
+        window.generarPDF = (index) => {
+            const evento = eventosGlobales[index];
+            if (!evento) return;
+
+            const content = document.createElement('div');
+            content.style.padding = '40px';
+            content.style.fontFamily = 'Arial, sans-serif';
+            content.style.color = '#333';
+            content.innerHTML = \`
+                <div style="text-align: center; border-bottom: 2px solid #1d4ed8; padding-bottom: 20px; margin-bottom: 30px;">
+                    <h1 style="color: #1d4ed8; margin: 0; font-size: 24px;">CENTRO DE ESTUDIANTES EPET N°6</h1>
+                    <h2 style="color: #666; margin: 5px 0 0 0; font-size: 16px;">Acta Oficial de Reunión</h2>
+                </div>
+                
+                <h3 style="font-size: 20px; margin-bottom: 10px; color: #111;">\${evento.Titulo}</h3>
+                
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
+                    <p style="margin: 5px 0;"><strong>Fecha:</strong> \${evento.Dia} de \${evento.Mes}</p>
+                    <p style="margin: 5px 0;"><strong>Hora:</strong> \${evento.Hora} hs</p>
+                    <p style="margin: 5px 0;"><strong>Lugar:</strong> \${evento.Lugar}</p>
+                </div>
+
+                \${evento.Asistentes ? \`<div style="margin-bottom: 25px;">
+                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Asistentes</h4>
+                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">\${evento.Asistentes}</p>
+                </div>\` : ''}
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Temario Inicial</h4>
+                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">\${evento.Temario}</p>
+                </div>
+
+                <div style="margin-bottom: 40px;">
+                    <h4 style="color: #1d4ed8; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Acta / Resumen</h4>
+                    <p style="white-space: pre-wrap; font-size: 14px; line-height: 1.6;">\${evento.Acta}</p>
+                </div>
+
+                <div style="margin-top: 60px; text-align: center;">
+                    <div style="display: inline-block; width: 250px; border-top: 1px solid #333; padding-top: 10px;">
+                        <p style="margin: 0; font-weight: bold;">Firma Secretario/a</p>
+                        <p style="margin: 0; font-size: 12px; color: #666;">Centro de Estudiantes EPET 6</p>
+                    </div>
+                </div>
+            \`;
+
+            const opt = {
+                margin:       1,
+                filename:     \`Acta_\${evento.Titulo.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf\`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            Toast.fire({ icon: 'info', title: 'Generando PDF...' });
+            html2pdf().set(opt).from(content).save().then(() => {
+                Toast.fire({ icon: 'success', title: 'PDF descargado correctamente' });
+            });
         };
     </script>
 </body>

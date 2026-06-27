@@ -8,16 +8,21 @@ const headerHTML = `
             </div>
             
             <!-- Menú Escritorio -->
-            <nav class="hidden md:flex space-x-6 text-sm font-semibold">
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold items-center">
                 <a href="index.html" class="nav-link hover:text-blue-200 transition-colors" data-page="index.html">Inicio</a>
                 <a href="propuestas.html" class="nav-link hover:text-blue-200 transition-colors" data-page="propuestas.html">Propuestas</a>
                 <a href="buzon.html" class="nav-link hover:text-blue-200 transition-colors" data-page="buzon.html">Sugerencias</a>
                 <a href="votacion.html" class="nav-link hover:text-blue-200 transition-colors" data-page="votacion.html">Votaciones</a>
                 <a id="nav-item-delegados" href="delegados.html" class="nav-link hidden hover:text-blue-200 transition-colors" data-page="delegados.html">Delegados</a>
                 <a id="nav-item-admin" href="admin.html" class="nav-link hidden hover:text-yellow-300 transition-colors text-yellow-100" data-page="admin.html"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
+                <a id="nav-item-centro" href="centro.html" class="nav-link hidden hover:text-green-300 transition-colors text-green-100 bg-green-700/30 px-2 py-1 rounded" data-page="centro.html"><i class="fa-solid fa-briefcase mr-1"></i> Portal</a>
             </nav>
 
             <div class="flex items-center gap-3 md:gap-4">
+                <button id="theme-toggle" type="button" class="text-white hover:text-yellow-300 focus:outline-none transition-colors" aria-label="Cambiar Tema">
+                    <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden text-xl"></i>
+                    <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden text-xl"></i>
+                </button>
                 <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank" aria-label="Instagram Lista Azul"
                     class="hidden md:block hover:text-blue-200 transition-colors transform hover:scale-110 duration-200">
                     <i class="fa-brands fa-instagram text-3xl"></i>
@@ -54,6 +59,10 @@ const headerHTML = `
                     <a href="admin.html" class="nav-link text-yellow-100 bg-yellow-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-yellow-600/40 transition-colors border border-yellow-500/30" data-page="admin.html">
                         <div class="bg-yellow-500 rounded p-1.5 text-yellow-900"><i class="fa-solid fa-gear w-4 text-center"></i></div>
                         Panel Administrativo
+                    </a>
+                    <a href="centro.html" class="nav-link text-green-100 bg-green-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-green-600/40 transition-colors border border-green-500/30" data-page="centro.html">
+                        <div class="bg-green-500 rounded p-1.5 text-green-900"><i class="fa-solid fa-briefcase w-4 text-center"></i></div>
+                        Portal del Centro
                     </a>
                 </div>
             </div>
@@ -154,6 +163,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 icon.classList.replace('fa-xmark', 'fa-bars');
             } else {
                 icon.classList.replace('fa-bars', 'fa-xmark');
+            }
+        });
+    }
+
+    // Configurar Toggle de Tema (Modo Oscuro)
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+    if (themeToggleBtn) {
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            if (localStorage.getItem('theme')) {
+                if (localStorage.getItem('theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
             }
         });
     }
