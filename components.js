@@ -33,16 +33,34 @@ const headerHTML = `
         </div>
 
         <!-- Menú Móvil Desplegable -->
-        <div id="mobile-menu" class="hidden md:hidden bg-blue-800 flex flex-col space-y-2 px-4 py-4 text-sm font-semibold absolute w-full shadow-xl">
-            <a href="index.html" class="nav-link text-white hover:text-blue-200 py-2 border-b border-blue-700" data-page="index.html">Inicio</a>
-            <a href="propuestas.html" class="nav-link text-white hover:text-blue-200 py-2 border-b border-blue-700" data-page="propuestas.html">Propuestas</a>
-            <a href="buzon.html" class="nav-link text-white hover:text-blue-200 py-2 border-b border-blue-700" data-page="buzon.html">Sugerencias</a>
-            <a href="votacion.html" class="nav-link text-white hover:text-blue-200 py-2 border-b border-blue-700" data-page="votacion.html">Votaciones</a>
-            <a id="nav-mobile-delegados" href="delegados.html" class="nav-link hidden text-white hover:text-blue-200 py-2 border-b border-blue-700" data-page="delegados.html">Delegados</a>
-            <a id="nav-mobile-admin" href="admin.html" class="nav-link hidden text-yellow-200 py-2 border-b border-blue-700" data-page="admin.html">Admin</a>
-            <div class="pt-2">
-                <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank" aria-label="Instagram Lista Azul" class="text-white hover:text-blue-200 flex items-center gap-2 py-2">
-                    <i class="fa-brands fa-instagram text-xl"></i> Instagram
+        <div id="mobile-menu" class="hidden md:hidden bg-blue-800 flex flex-col px-4 py-4 text-sm font-semibold absolute w-full shadow-xl z-40">
+            <a href="index.html" class="nav-link text-white hover:text-blue-200 py-3 border-b border-blue-700/50 flex items-center gap-3" data-page="index.html"><i class="fa-solid fa-house w-5 text-center"></i> Inicio</a>
+            <a href="propuestas.html" class="nav-link text-white hover:text-blue-200 py-3 border-b border-blue-700/50 flex items-center gap-3" data-page="propuestas.html"><i class="fa-solid fa-bullhorn w-5 text-center"></i> Propuestas</a>
+            <a href="buzon.html" class="nav-link text-white hover:text-blue-200 py-3 border-b border-blue-700/50 flex items-center gap-3" data-page="buzon.html"><i class="fa-solid fa-envelope w-5 text-center"></i> Sugerencias</a>
+            <a href="votacion.html" class="nav-link text-white hover:text-blue-200 py-3 border-b border-blue-700/50 flex items-center gap-3" data-page="votacion.html"><i class="fa-solid fa-check-to-slot w-5 text-center"></i> Votaciones</a>
+            
+            <div id="nav-mobile-delegados" class="hidden">
+                <div class="flex flex-col mt-4">
+                    <span class="text-xs text-blue-300 uppercase tracking-wider mb-2 font-bold flex items-center gap-2"><i class="fa-solid fa-bolt"></i> Accesos Rápidos</span>
+                    <a href="delegados.html" class="nav-link text-white bg-blue-700/50 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-blue-600 transition-colors" data-page="delegados.html">
+                        <div class="bg-blue-500 rounded p-1.5"><i class="fa-solid fa-users w-4 text-center"></i></div>
+                        Panel de Delegados
+                    </a>
+                </div>
+            </div>
+            
+            <div id="nav-mobile-admin" class="hidden">
+                <div class="flex flex-col mt-2">
+                    <a href="admin.html" class="nav-link text-yellow-100 bg-yellow-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-yellow-600/40 transition-colors border border-yellow-500/30" data-page="admin.html">
+                        <div class="bg-yellow-500 rounded p-1.5 text-yellow-900"><i class="fa-solid fa-gear w-4 text-center"></i></div>
+                        Panel Administrativo
+                    </a>
+                </div>
+            </div>
+
+            <div class="pt-4 mt-2 border-t border-blue-700/50">
+                <a href="https://www.instagram.com/cde.epet6.listaazul/" target="_blank" aria-label="Instagram Lista Azul" class="text-white hover:text-blue-200 flex items-center gap-3 py-2">
+                    <i class="fa-brands fa-instagram text-xl w-5 text-center"></i> Seguinos en Instagram
                 </a>
             </div>
         </div>
