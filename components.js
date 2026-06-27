@@ -14,8 +14,7 @@ const headerHTML = `
                 <a href="buzon.html" class="nav-link hover:text-blue-200 transition-colors" data-page="buzon.html">Sugerencias</a>
                 <a href="votacion.html" class="nav-link hover:text-blue-200 transition-colors" data-page="votacion.html">Votaciones</a>
                 <a id="nav-item-delegados" href="delegados.html" class="nav-link hidden hover:text-blue-200 transition-colors" data-page="delegados.html">Delegados</a>
-                <a id="nav-item-admin" href="admin.html" class="nav-link hidden hover:text-yellow-300 transition-colors text-yellow-100" data-page="admin.html"><i class="fa-solid fa-gear mr-1"></i> Administración</a>
-                <a id="nav-item-centro" href="centro.html" class="nav-link hidden hover:text-green-300 transition-colors text-green-100 bg-green-700/30 px-2 py-1 rounded" data-page="centro.html"><i class="fa-solid fa-briefcase mr-1"></i> Portal</a>
+                <a id="nav-item-dashboard" href="dashboard.html" class="nav-link hidden hover:text-green-300 transition-colors text-green-100 bg-green-700/30 px-2 py-1 rounded" data-page="dashboard.html"><i class="fa-solid fa-gauge-high mr-1"></i> Panel de Control</a>
             </nav>
 
             <div class="flex items-center gap-3 md:gap-4">
@@ -54,15 +53,11 @@ const headerHTML = `
                 </div>
             </div>
             
-            <div id="nav-mobile-admin" class="hidden">
+            <div id="nav-mobile-dashboard" class="hidden">
                 <div class="flex flex-col mt-2">
-                    <a href="admin.html" class="nav-link text-yellow-100 bg-yellow-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-yellow-600/40 transition-colors border border-yellow-500/30" data-page="admin.html">
-                        <div class="bg-yellow-500 rounded p-1.5 text-yellow-900"><i class="fa-solid fa-gear w-4 text-center"></i></div>
-                        Panel Administrativo
-                    </a>
-                    <a href="centro.html" class="nav-link text-green-100 bg-green-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-green-600/40 transition-colors border border-green-500/30" data-page="centro.html">
-                        <div class="bg-green-500 rounded p-1.5 text-green-900"><i class="fa-solid fa-briefcase w-4 text-center"></i></div>
-                        Portal del Centro
+                    <a href="dashboard.html" class="nav-link text-green-100 bg-green-600/20 rounded-lg px-3 py-3 mb-2 flex items-center gap-3 hover:bg-green-600/40 transition-colors border border-green-500/30" data-page="dashboard.html">
+                        <div class="bg-green-500 rounded p-1.5 text-green-900"><i class="fa-solid fa-gauge-high w-4 text-center"></i></div>
+                        Panel de Control
                     </a>
                 </div>
             </div>

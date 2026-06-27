@@ -98,11 +98,10 @@ export const initAuth = () => {
                 // Mostrar instantáneamente basado en caché local
                 const cachedRole = localStorage.getItem(`role_${user.email}`);
                 if (cachedRole === 'admin') {
-                    document.getElementById('nav-item-admin')?.classList.remove('hidden');
-                    document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                    document.getElementById('nav-item-dashboard')?.classList.remove('hidden');
+                    document.getElementById('nav-mobile-dashboard')?.classList.remove('hidden');
                     document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                     document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                    document.getElementById('nav-item-centro')?.classList.remove('hidden');
                 } else if (cachedRole === 'delegado') {
                     document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                     document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
@@ -119,11 +118,10 @@ export const initAuth = () => {
 
                     if (isAdmin) {
                         localStorage.setItem(`role_${user.email}`, 'admin');
-                        document.getElementById('nav-item-admin')?.classList.remove('hidden');
-                        document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
+                        document.getElementById('nav-item-dashboard')?.classList.remove('hidden');
+                        document.getElementById('nav-mobile-dashboard')?.classList.remove('hidden');
                         document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                         document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
-                        document.getElementById('nav-item-centro')?.classList.remove('hidden');
                         updateMobileBottomNav(user, 'admin');
                     } else {
                         const delSnap = await getDoc(doc(db, "config", "delegados"));
@@ -134,11 +132,10 @@ export const initAuth = () => {
                             updateMobileBottomNav(user, 'delegado');
                         } else {
                             localStorage.removeItem(`role_${user.email}`);
-                            document.getElementById('nav-item-admin')?.classList.add('hidden');
-                            document.getElementById('nav-mobile-admin')?.classList.add('hidden');
+                            document.getElementById('nav-item-dashboard')?.classList.add('hidden');
+                            document.getElementById('nav-mobile-dashboard')?.classList.add('hidden');
                             document.getElementById('nav-item-delegados')?.classList.add('hidden');
                             document.getElementById('nav-mobile-delegados')?.classList.add('hidden');
-                            document.getElementById('nav-item-centro')?.classList.add('hidden');
                             updateMobileBottomNav(user, null);
                         }
                     }
@@ -157,11 +154,10 @@ export const initAuth = () => {
                 document.querySelectorAll('#btn-login-nav').forEach(btn => btn.addEventListener('click', loginWithGoogle));
 
                 // Ocultar elementos para no-logueados
-                document.getElementById('nav-item-admin')?.classList.add('hidden');
-                document.getElementById('nav-mobile-admin')?.classList.add('hidden');
+                document.getElementById('nav-item-dashboard')?.classList.add('hidden');
+                document.getElementById('nav-mobile-dashboard')?.classList.add('hidden');
                 document.getElementById('nav-item-delegados')?.classList.add('hidden');
                 document.getElementById('nav-mobile-delegados')?.classList.add('hidden');
-                document.getElementById('nav-item-centro')?.classList.add('hidden');
                 updateMobileBottomNav(null, null);
             }
             resolve(user);
