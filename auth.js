@@ -102,6 +102,7 @@ export const initAuth = () => {
                     document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
                     document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                     document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+                    document.getElementById('nav-item-centro')?.classList.remove('hidden');
                 } else if (cachedRole === 'delegado') {
                     document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                     document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
@@ -122,6 +123,7 @@ export const initAuth = () => {
                         document.getElementById('nav-mobile-admin')?.classList.remove('hidden');
                         document.getElementById('nav-item-delegados')?.classList.remove('hidden');
                         document.getElementById('nav-mobile-delegados')?.classList.remove('hidden');
+                        document.getElementById('nav-item-centro')?.classList.remove('hidden');
                         updateMobileBottomNav(user, 'admin');
                     } else {
                         const delSnap = await getDoc(doc(db, "config", "delegados"));
@@ -136,6 +138,7 @@ export const initAuth = () => {
                             document.getElementById('nav-mobile-admin')?.classList.add('hidden');
                             document.getElementById('nav-item-delegados')?.classList.add('hidden');
                             document.getElementById('nav-mobile-delegados')?.classList.add('hidden');
+                            document.getElementById('nav-item-centro')?.classList.add('hidden');
                             updateMobileBottomNav(user, null);
                         }
                     }
@@ -158,6 +161,7 @@ export const initAuth = () => {
                 document.getElementById('nav-mobile-admin')?.classList.add('hidden');
                 document.getElementById('nav-item-delegados')?.classList.add('hidden');
                 document.getElementById('nav-mobile-delegados')?.classList.add('hidden');
+                document.getElementById('nav-item-centro')?.classList.add('hidden');
                 updateMobileBottomNav(null, null);
             }
             resolve(user);
